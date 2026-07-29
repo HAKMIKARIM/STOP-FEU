@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>STOP FEU - International Wildfire Early Warning & Tactical Command System</title>
 
-    <!-- Google Tag (gtag.js) - Google Analytics Stream G-RRR96EVB20 -->
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RRR96EVB20"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -56,7 +56,7 @@
         body { font-family: 'Cairo', 'Inter', 'Tajawal', sans-serif; background-color: #f8fafc; color: #0f172a; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        #map, #admin-map { height: 50vh; min-height: 390px; width: 100%; border-radius: 1rem; z-index: 10; }
+        #map, #admin-map { height: 52vh; min-height: 410px; width: 100%; border-radius: 1rem; z-index: 10; }
         
         .pulse-flame { animation: pulseFlame 1.3s infinite alternate; }
         @keyframes pulseFlame {
@@ -207,7 +207,7 @@
                             </p>
                         </div>
                         <div class="flex gap-2">
-                            <input type="text" id="otp-input" placeholder="الرمز (4 أرقام)" class="bg-white border border-emerald-300 rounded-lg p-2.5 text-center font-bold tracking-widest text-base text-slate-800 w-full outline-none focus:ring-2 focus:ring-dzGreen">
+                            <input type="password" id="otp-input" placeholder="••••" maxlength="6" autocomplete="off" class="bg-white border border-emerald-300 rounded-lg p-2.5 text-center font-bold tracking-widest text-base text-slate-800 w-full outline-none focus:ring-2 focus:ring-dzGreen">
                             <button type="button" onclick="verifyOTP()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-4 py-2 rounded-lg text-xs whitespace-nowrap shadow-sm" data-i18n="btnConfirmOtp">
                                 تأكيد الرمز
                             </button>
@@ -434,21 +434,40 @@
                     </span>
                 </div>
 
-                <!-- ADMIN GLOBAL BROADCAST BOX -->
-                <div class="bg-gradient-to-r from-dzRed via-red-700 to-dzRed text-white p-4 rounded-2xl space-y-3 shadow-lg border border-red-500/40">
-                    <div class="flex items-center justify-between border-b border-white/20 pb-2">
+                <!-- ADMIN GLOBAL BROADCAST BOX ENHANCED WITH TARGET OPTIONS -->
+                <div class="bg-gradient-to-r from-dzRed via-red-700 to-dzRed text-white p-4.5 rounded-2xl space-y-3 shadow-lg border border-red-500/40">
+                    <div class="flex items-center justify-between border-b border-white/20 pb-2.5">
                         <div class="flex items-center gap-2">
-                            <i class="fas fa-bullhorn text-amber-300 text-lg animate-bounce"></i>
-                            <h3 class="font-black text-sm" data-i18n="broadcastHeader">نظام بث الإشعارات المباشرة (Global Broadcast)</h3>
+                            <i class="fas fa-bullhorn text-amber-300 text-xl animate-bounce"></i>
+                            <div>
+                                <h3 class="font-black text-sm" data-i18n="broadcastHeader">نظام بث الإشعارات المباشرة (Global Broadcast)</h3>
+                                <p class="text-[10px] text-red-100" data-i18n="broadcastSub">تنبيه طارئ يظهر فوراً مع صفارة إنذار صوتية</p>
+                            </div>
                         </div>
-                        <span class="bg-white/20 text-white text-[10px] px-2.5 py-0.5 rounded font-black" data-i18n="liveBroad">بث حي فوري</span>
+                        <span class="bg-white/20 text-white text-[10px] px-2.5 py-1 rounded-lg font-black flex items-center gap-1">
+                            <i class="fas fa-tower-broadcast animate-pulse"></i> <span data-i18n="liveBroad">بث حي فوري</span>
+                        </span>
                     </div>
-                    <p class="text-xs text-red-100" data-i18n="broadcastSub">إرسال تنبيه طارئ يظهر فوراً مع صفارة إنذار صوتية على كافة الأجهزة المفتوحة الآن:</p>
-                    <div class="flex gap-2">
-                        <input type="text" id="admin-broadcast-msg" placeholder="تنبيه عاجل: يرجى توخي الحذر..." class="bg-white/10 border border-white/30 placeholder-red-200 rounded-xl p-2.5 text-xs text-white w-full outline-none focus:ring-2 focus:ring-amber-300 font-bold">
-                        <button onclick="sendAdminGlobalBroadcast()" id="btn-broadcast" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-black px-4 py-2.5 rounded-xl text-xs whitespace-nowrap shadow-md transition flex items-center gap-1">
-                            <i class="fas fa-tower-broadcast"></i> <span data-i18n="btnSendBroadcast">إرسال البث</span>
-                        </button>
+
+                    <!-- Broadcast Scope Selector Options -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+                        <div>
+                            <label class="block text-[10px] font-bold text-red-100 mb-1" data-i18n="labelTargetAudience">فئة المستهدفين للبث:</label>
+                            <select id="admin-broadcast-target" class="w-full bg-white/20 border border-white/30 text-white rounded-xl p-2 font-bold outline-none focus:bg-slate-900">
+                                <option value="all" class="text-slate-900" selected data-i18n="targetGlobal">📢 تنبيه عام للجميع (Alerte Globale)</option>
+                                <option value="citizen" class="text-slate-900" data-i18n="targetCitizen">🚨 مواطنين وإخلاء (Alerte Citoyens)</option>
+                                <option value="officer" class="text-slate-900" data-i18n="targetOfficers">🚒 ضباط وفرق إطفاء (Alerte Officiers)</option>
+                            </select>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <label class="block text-[10px] font-bold text-red-100 mb-1" data-i18n="labelBroadcastText">نص الرسالة أو التوجيه الطارئ:</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="admin-broadcast-msg" placeholder="تنبيه عاجل: يرجى إخلاء المنطقة الشمالية..." class="bg-white/10 border border-white/30 placeholder-red-200 rounded-xl p-2 text-xs text-white w-full outline-none focus:ring-2 focus:ring-amber-300 font-bold">
+                                <button onclick="sendAdminGlobalBroadcast()" id="btn-broadcast" class="bg-amber-400 hover:bg-amber-300 text-slate-900 font-black px-4 py-2 rounded-xl text-xs whitespace-nowrap shadow-md transition flex items-center gap-1 active:scale-95">
+                                    <i class="fas fa-tower-broadcast"></i> <span data-i18n="btnSendBroadcast">إرسال البث</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -565,7 +584,7 @@
                     </div>
                 </div>
 
-                <!-- ADMIN AUTHORIZED OFFICERS REGISTRATION FORM -->
+                <!-- ADMIN AUTHORIZED OFFICERS REGISTRATION FORM (PIN MASKED WITH ****) -->
                 <div class="bg-white border border-blue-200 p-4 sm:p-5 rounded-2xl shadow-sm space-y-4">
                     <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                         <div>
@@ -592,7 +611,12 @@
                         </div>
                         <div>
                             <label class="block font-black text-slate-700 mb-1" data-i18n="labelAddOffPin">الرمز السري للدخول (PIN) *</label>
-                            <input type="text" id="admin-add-off-pin" required placeholder="2026" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-slate-800 font-mono font-bold tracking-widest outline-none focus:border-dzBlue">
+                            <div class="relative">
+                                <input type="password" id="admin-add-off-pin" maxlength="6" required placeholder="••••" autocomplete="off" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 pl-9 text-slate-800 font-mono font-bold tracking-widest outline-none focus:border-dzBlue">
+                                <button type="button" onclick="togglePasswordVisibility('admin-add-off-pin', this)" class="absolute left-2.5 top-2.5 text-slate-400 hover:text-slate-700 text-xs">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
                         </div>
                         <div class="sm:col-span-2 lg:col-span-4 pt-1">
                             <button type="submit" class="w-full bg-dzBlue hover:bg-blue-700 text-white font-black py-2.5 rounded-xl text-xs flex items-center justify-center gap-1.5 transition shadow-sm">
@@ -602,16 +626,19 @@
                     </form>
                 </div>
 
-                <!-- OFFICERS ROSTER -->
+                <!-- OFFICERS ROSTER WITH ADMIN MANAGEMENT BUTTONS -->
                 <div class="bg-white border border-blue-200 p-4 sm:p-5 rounded-2xl shadow-sm space-y-3">
-                    <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
                         <div>
                             <h3 class="font-black text-sm text-slate-900 flex items-center gap-2">
                                 <i class="fas fa-address-book text-dzBlue text-lg"></i> <span data-i18n="rosterTitle">سجل ضباط الحماية المدنية والفرق المصرح لهم</span>
                             </h3>
                             <p class="text-[11px] text-slate-500" data-i18n="rosterSub">سجل كامل بالضباط المصرح لهم، أرقامهم والرمز السري (PIN) الخاص بكل ضابط</p>
                         </div>
-                        <span id="admin-officers-count-badge" class="bg-blue-100 text-dzBlue text-xs px-2.5 py-1 rounded-full font-black">0 ضباط</span>
+                        <div class="flex items-center gap-2">
+                            <input type="text" id="officer-search-input" onkeyup="filterOfficersRoster(this.value)" placeholder="بحث بالاسم أو الهاتف..." class="bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1 text-xs outline-none focus:border-dzBlue">
+                            <span id="admin-officers-count-badge" class="bg-blue-100 text-dzBlue text-xs px-2.5 py-1 rounded-full font-black">0 ضباط</span>
+                        </div>
                     </div>
 
                     <div id="admin-officers-roster-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -619,15 +646,23 @@
                     </div>
                 </div>
 
-                <!-- ADMIN MAP WITH HOVER INTEL -->
-                <div>
-                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-                        <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider flex items-center gap-2">
-                            <i class="fas fa-earth-africa text-dzGreen"></i> <span data-i18n="adminMapTitle">خريطة القيادة العامة وإدارة الميدان</span>
-                        </h3>
-                        <button onclick="fitMapToAllMarkers('admin')" class="bg-dzBlue hover:bg-blue-800 text-white text-[11px] px-2.5 py-1 rounded-lg font-bold flex items-center gap-1 shadow-sm">
-                            <i class="fas fa-expand"></i> <span data-i18n="btnFitAll">إظهار الكل</span>
-                        </button>
+                <!-- ADMIN MAP WITH INTERACTIVE MOUSE DRAG & DISPATCH -->
+                <div class="space-y-2">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                            <h3 class="text-xs font-black text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                                <i class="fas fa-earth-africa text-dzGreen"></i> <span data-i18n="adminMapTitle">خريطة القيادة العامة وإدارة الميدان (سحب الشاحنات بالماوس)</span>
+                            </h3>
+                            <p class="text-[11px] text-slate-500" data-i18n="adminMapDragTip">💡 يمكن للمدير سحب وإفلات أي شاحنة بالماوس لتحديث موقعها الجغرافي مباشرة في السحابة</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="toggleAdminMapClickDispatch()" id="btn-toggle-dispatch-click" class="bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-[11px] px-2.5 py-1 rounded-lg font-bold flex items-center gap-1 shadow-sm">
+                                <i class="fas fa-mouse-pointer text-dzOrange"></i> <span id="text-dispatch-click" data-i18n="btnEnableClickDispatch">تفعيل نشر وحدة بنقرة ماوس</span>
+                            </button>
+                            <button onclick="fitMapToAllMarkers('admin')" class="bg-dzBlue hover:bg-blue-800 text-white text-[11px] px-2.5 py-1 rounded-lg font-bold flex items-center gap-1 shadow-sm">
+                                <i class="fas fa-expand"></i> <span data-i18n="btnFitAll">إظهار الكل</span>
+                            </button>
+                        </div>
                     </div>
                     <div id="admin-map" class="shadow-md border border-slate-200"></div>
                 </div>
@@ -723,7 +758,7 @@
         </div>
     </div>
 
-    <!-- AUTHENTICATION & LOGIN MODAL -->
+    <!-- AUTHENTICATION & LOGIN MODAL (PIN & PASSWORD MASKED) -->
     <div id="login-modal" class="fixed inset-0 bg-slate-900/70 hidden z-[130] flex items-center justify-center p-4 backdrop-blur-md">
         <div class="bg-white border border-slate-200 rounded-2xl p-5 max-w-md w-full shadow-2xl space-y-4">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -759,7 +794,14 @@
                         </div>
                     </div>
                     <input type="tel" id="login-officer-phone" placeholder="رقم هاتف الضابط (0661001122)" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs text-slate-800 outline-none font-semibold">
-                    <input type="password" id="login-officer-pin" placeholder="الرمز السري PIN (2026)" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs text-slate-800 outline-none font-mono tracking-widest">
+                    
+                    <div class="relative">
+                        <input type="password" id="login-officer-pin" placeholder="الرمز السري PIN (••••)" maxlength="6" autocomplete="off" class="w-full bg-white border border-slate-200 rounded-lg p-2 pl-8 text-xs text-slate-800 outline-none font-mono tracking-widest">
+                        <button type="button" onclick="togglePasswordVisibility('login-officer-pin', this)" class="absolute left-2.5 top-2 text-slate-400 hover:text-slate-700 text-xs">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+
                     <button onclick="verifyAndSetOfficerRole()" class="w-full bg-dzBlue hover:bg-blue-700 text-white font-bold py-2 rounded-lg text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
                         <i class="fas fa-key"></i> <span data-i18n="btnLoginOfficer">دخول لوحة الضابط</span>
                     </button>
@@ -775,7 +817,12 @@
                             <p class="text-[10px] text-slate-500" data-i18n="roleAdminSub">خاص بالمسؤولين والقيادة المركزية</p>
                         </div>
                     </div>
-                    <input type="password" id="login-admin-pwd" placeholder="كلمة المرور (15041978)" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs text-slate-800 outline-none font-mono">
+                    <div class="relative">
+                        <input type="password" id="login-admin-pwd" placeholder="كلمة المرور (••••••••)" autocomplete="off" class="w-full bg-white border border-slate-200 rounded-lg p-2 pl-8 text-xs text-slate-800 outline-none font-mono">
+                        <button type="button" onclick="togglePasswordVisibility('login-admin-pwd', this)" class="absolute left-2.5 top-2 text-slate-400 hover:text-slate-700 text-xs">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
                     <button onclick="setRole('admin')" class="w-full bg-dzRed hover:bg-red-700 text-white font-bold py-2 rounded-lg text-xs transition" data-i18n="btnLoginAdmin">
                         دخول غرفة القيادة
                     </button>
@@ -868,6 +915,11 @@
                 broadcastHeader: "نظام بث الإشعارات المباشرة (Global Broadcast)",
                 liveBroad: "بث حي فوري",
                 broadcastSub: "إرسال تنبيه طارئ يظهر فوراً مع صفارة إنذار صوتية على كافة الأجهزة المفتوحة الآن:",
+                labelTargetAudience: "فئة المستهدفين للبث:",
+                targetGlobal: "📢 تنبيه عام للجميع (Alerte Globale)",
+                targetCitizen: "🚨 مواطنين وإخلاء (Alerte Citoyens)",
+                targetOfficers: "🚒 ضباط وفرق إطفاء (Alerte Officiers)",
+                labelBroadcastText: "نص الرسالة أو التوجيه الطارئ:",
                 btnSendBroadcast: "إرسال البث",
                 dbDiagnosticHeader: "حالة قاعدة البيانات السحابية (Firestore Diagnostic)",
                 dbProject: "المشروع السحابي المرتبط:",
@@ -899,7 +951,9 @@
                 btnAddOfficer: "اعتماد الضابط وتخزين الرمز السري في السحابة",
                 rosterTitle: "سجل ضباط الحماية المدنية والفرق المصرح لهم",
                 rosterSub: "سجل كامل بالضباط المصرح لهم، أرقامهم والرمز السري (PIN) الخاص بكل ضابط",
-                adminMapTitle: "خريطة القيادة العامة وإدارة الميدان",
+                adminMapTitle: "خريطة القيادة العامة وإدارة الميدان (سحب الشاحنات بالماوس)",
+                adminMapDragTip: "💡 يمكن للمدير سحب وإفلات أي شاحنة بالماوس لتحديث موقعها الجغرافي مباشرة في السحابة",
+                btnEnableClickDispatch: "تفعيل نشر وحدة بنقرة ماوس",
                 adminManageReports: "إدارة بلاغات المواطنين",
                 adminManageUnits: "الضباط والوحدات الميدانية النشطة",
                 navReport: "التبليغ",
@@ -981,6 +1035,11 @@
                 broadcastHeader: "Système de Diffusion d'Alerte Globale (Global Broadcast)",
                 liveBroad: "Diffusion Directe",
                 broadcastSub: "Envoyer une alerte d'urgence avec sirène sonore à tous les appareils connectés :",
+                labelTargetAudience: "Public cible de la diffusion :",
+                targetGlobal: "📢 Alerte Globale (Tout le monde)",
+                targetCitizen: "🚨 Alerte Citoyens & Évacuation",
+                targetOfficers: "🚒 Alerte Officiers & Brigades",
+                labelBroadcastText: "Texte du message ou consigne d'urgence :",
                 btnSendBroadcast: "Diffuser l'Alerte",
                 dbDiagnosticHeader: "Diagnostic Base de Données Cloud (Firestore)",
                 dbProject: "Projet Cloud Lié :",
@@ -1012,7 +1071,9 @@
                 btnAddOfficer: "Enregistrer l'Officier & Code PIN au Cloud",
                 rosterTitle: "Registre des Officiers et Brigades Autorisés",
                 rosterSub: "Annuaire des officiers enregistrés, téléphones et codes PIN d'accès",
-                adminMapTitle: "Carte de Commandement Général",
+                adminMapTitle: "Carte de Commandement Général (Glisser-Déposer au Clic)",
+                adminMapDragTip: "💡 Le commandant peut glisser-déposer les camions à la souris pour mettre à jour leur position GPS",
+                btnEnableClickDispatch: "Déployer Unité au Clic Souris",
                 adminManageReports: "Gestion des Signalements Citoyens",
                 adminManageUnits: "Unités & Officiers Terrain Actifs",
                 navReport: "Signalement",
@@ -1094,6 +1155,11 @@
                 broadcastHeader: "Global Emergency Broadcast System",
                 liveBroad: "Live Broadcast",
                 broadcastSub: "Send instant emergency notification with audio siren to all connected devices:",
+                labelTargetAudience: "Target Broadcast Audience:",
+                targetGlobal: "📢 Global Broadcast (Everyone)",
+                targetCitizen: "🚨 Citizen Evacuation Alert",
+                targetOfficers: "🚒 Fire Officer Tactical Alert",
+                labelBroadcastText: "Emergency Message or Instructions:",
                 btnSendBroadcast: "Broadcast Alert",
                 dbDiagnosticHeader: "Cloud Database Status (Firestore Diagnostic)",
                 dbProject: "Linked Cloud Project:",
@@ -1125,7 +1191,9 @@
                 btnAddOfficer: "Authorize Officer & Save PIN to Cloud",
                 rosterTitle: "Authorized Officers & Command Roster",
                 rosterSub: "Complete directory of authorized officers, phones, and access PIN codes",
-                adminMapTitle: "General Command Map",
+                adminMapTitle: "General Command Map (Drag & Drop Units)",
+                adminMapDragTip: "💡 Admin can drag & drop firefighter truck markers to instantly update location",
+                btnEnableClickDispatch: "Enable Mouse Click Dispatch",
                 adminManageReports: "Manage Incident Reports",
                 adminManageUnits: "Active Field Officers & Units",
                 navReport: "Report",
@@ -1148,7 +1216,7 @@
             }
         };
 
-        // INTERNATIONAL COUNTRIES DATA (ALGERIA, FRANCE, SPAIN, PORTUGAL, MOROCCO)
+        // INTERNATIONAL COUNTRIES DATA
         const COUNTRIES_DATA = {
             dz: {
                 code: 'dz',
@@ -1263,7 +1331,7 @@
             }
         };
 
-        // Application State
+        // Application Global State
         let app, db, auth, currentUser;
         let generatedOTP = null;
         let isWhatsAppVerified = false;
@@ -1271,6 +1339,8 @@
         let chartWilayasInstance = null;
         let sessionStartTime = Date.now();
         let lastReceivedBroadcastId = null;
+        let adminClickDispatchActive = false;
+        let tacticalRouteLines = [];
 
         window.appState = {
             lang: 'ar',
@@ -1295,6 +1365,19 @@
             firestoreStatus: 'Initializing...'
         };
 
+        window.togglePasswordVisibility = function(inputId, btnEl) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            const icon = btnEl.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                if (icon) { icon.className = 'fas fa-eye-slash'; }
+            } else {
+                input.type = 'password';
+                if (icon) { icon.className = 'fas fa-eye'; }
+            }
+        };
+
         window.changeLanguage = function(lang) {
             window.appState.lang = lang;
             const doc = document.documentElement;
@@ -1309,7 +1392,6 @@
                 }
             });
 
-            // Update sub-header title
             const subHeader = document.getElementById('sub-header-title');
             if (subHeader) {
                 if (lang === 'fr') subHeader.textContent = "Sapeurs-Pompiers • Gestion de Crise & Prévention Incendies";
@@ -1325,14 +1407,12 @@
             const cData = COUNTRIES_DATA[countryCode];
             if (!cData) return;
 
-            // Update Country Badge in Header
             const countryBadge = document.getElementById('country-badge');
             if (countryBadge) {
                 const cName = (window.appState.lang === 'fr') ? cData.nameFr : (window.appState.lang === 'en') ? cData.nameEn : cData.nameAr;
                 countryBadge.textContent = `${cData.flag} ${cName}`;
             }
 
-            // Update Emergency Hotlines List
             const emerList = document.getElementById('emergency-numbers-list');
             if (emerList) {
                 emerList.innerHTML = cData.emergencies.map(e => `
@@ -1342,13 +1422,11 @@
                 `).join('');
             }
 
-            // Update Region Options Dropdown
             const regionSelect = document.getElementById('report-wilaya');
             if (regionSelect) {
                 regionSelect.innerHTML = cData.regions.map(r => `<option value="${r}">${r}</option>`).join('');
             }
 
-            // Recenter Map
             window.appState.userCoords = { lat: cData.center[0], lng: cData.center[1] };
             if (window.appState.maps.client) window.appState.maps.client.setView(cData.center, cData.zoom);
             if (window.appState.maps.admin) window.appState.maps.admin.setView(cData.center, cData.zoom);
@@ -1450,7 +1528,6 @@
                 (formatPhoneNumber(o.phone) === cleanPhone || o.phone === phoneInput) && o.pin === pinInput
             );
 
-            // Fallback default officer for emergency demo (Captain Mansour: 0661001122 / PIN: 2026)
             if (!matchedOfficer && (phoneInput === '0661001122' || cleanPhone === '213661001122') && pinInput === '2026') {
                 matchedOfficer = { name: 'النقيب منصور', phone: phoneInput, brigade: 'وحدة التدخل السريع' };
             }
@@ -1611,8 +1688,15 @@
                         const bData = change.doc.data();
                         if (bData.timestamp && bData.timestamp > sessionStartTime && change.doc.id !== lastReceivedBroadcastId) {
                             lastReceivedBroadcastId = change.doc.id;
-                            window.playEmergencySiren();
-                            showBroadcastSirenModal(bData.message || '🚨 Emergency Broadcast');
+                            
+                            // Check target filtering (Global, Citizen, Officer)
+                            const currentRole = window.appState.role;
+                            const target = bData.target || 'all';
+
+                            if (target === 'all' || target === currentRole) {
+                                window.playEmergencySiren();
+                                showBroadcastSirenModal(`[${target.toUpperCase()}] ${bData.message}`);
+                            }
                         }
                     }
                 });
@@ -1778,14 +1862,17 @@
                 window.appState.officers.unshift(officerObj);
             }
 
-            window.showModal("Officer Authorized", `${name} granted access with PIN: ${pin}`, "🔑");
+            window.showModal("Officer Authorized", `${name} granted access with PIN code.`, "🔑");
             event.target.reset();
             updateUI();
         };
 
         window.sendAdminGlobalBroadcast = async function() {
             const msgInput = document.getElementById('admin-broadcast-msg');
+            const targetSelect = document.getElementById('admin-broadcast-target');
             const msg = msgInput?.value.trim();
+            const target = targetSelect?.value || 'all';
+
             if (!msg) {
                 window.showModal("Empty Message", "Please type a broadcast message.", "⚠️");
                 return;
@@ -1793,6 +1880,7 @@
 
             const broadcastData = {
                 message: msg,
+                target: target,
                 country: window.appState.country,
                 timestamp: Date.now()
             };
@@ -1801,15 +1889,15 @@
                 try { await addDoc(collection(db, 'broadcasts'), broadcastData); }
                 catch (e) {
                     window.playEmergencySiren();
-                    showBroadcastSirenModal(msg);
+                    showBroadcastSirenModal(`[${target.toUpperCase()}] ${msg}`);
                 }
             } else {
                 window.playEmergencySiren();
-                showBroadcastSirenModal(msg);
+                showBroadcastSirenModal(`[${target.toUpperCase()}] ${msg}`);
             }
 
             if (msgInput) msgInput.value = '';
-            window.showModal("Broadcast Sent", "Emergency broadcast transmitted to all live sessions.", "📡");
+            window.showModal("Broadcast Sent", `Emergency alert sent to target group (${target.toUpperCase()}).`, "📡");
         };
 
         window.testCloudWrite = async function() {
@@ -1916,6 +2004,46 @@
             }
         };
 
+        window.updateOfficerPIN = async function(fb_id, index) {
+            const newPin = prompt("أدخل الرمز السري الجديد للضابط (Nouveau PIN):");
+            if (!newPin) return;
+
+            if (fb_id && db && navigator.onLine) {
+                try {
+                    await updateDoc(doc(db, 'officers', fb_id), { pin: newPin.trim() });
+                    window.showModal("PIN Updated", "Officer PIN code updated in Firestore cloud.", "🔑");
+                } catch(e) {}
+            } else {
+                if (window.appState.officers[index]) window.appState.officers[index].pin = newPin.trim();
+                updateUI();
+                window.showModal("PIN Updated", "Officer PIN code updated.", "🔑");
+            }
+        };
+
+        window.toggleShowOfficerPinInRoster = function(btnEl, actualPin) {
+            const pinDisplayEl = btnEl.previousElementSibling;
+            if (!pinDisplayEl) return;
+            if (pinDisplayEl.getAttribute('data-hidden') === 'true') {
+                pinDisplayEl.textContent = `PIN: ${actualPin}`;
+                pinDisplayEl.setAttribute('data-hidden', 'false');
+                btnEl.innerHTML = `<i class="fas fa-eye-slash"></i>`;
+            } else {
+                pinDisplayEl.textContent = `PIN: ••••`;
+                pinDisplayEl.setAttribute('data-hidden', 'true');
+                btnEl.innerHTML = `<i class="fas fa-eye"></i>`;
+            }
+        };
+
+        window.filterOfficersRoster = function(query) {
+            const q = query.toLowerCase().trim();
+            const cards = document.querySelectorAll('.officer-roster-card');
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(q)) { card.classList.remove('hidden'); }
+                else { card.classList.add('hidden'); }
+            });
+        };
+
         window.runAIAnalysis = async function() {
             const aiResult = document.getElementById('ai-result');
             const aiLoading = document.getElementById('ai-loading');
@@ -1962,8 +2090,84 @@
             window.appState.maps.admin = L.map('admin-map').setView([center.lat, center.lng], 6);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(window.appState.maps.admin);
 
+            // Allow mouse click dispatch on Admin Map
+            window.appState.maps.admin.on('click', function(e) {
+                if (adminClickDispatchActive) {
+                    const newLat = e.latlng.lat;
+                    const newLng = e.latlng.lng;
+                    dispatchNewUnitAtCoords(newLat, newLng);
+                }
+            });
+
             updateMapMarkers();
         }
+
+        window.toggleAdminMapClickDispatch = function() {
+            adminClickDispatchActive = !adminClickDispatchActive;
+            const btn = document.getElementById('btn-toggle-dispatch-click');
+            const text = document.getElementById('text-dispatch-click');
+
+            if (adminClickDispatchActive) {
+                if (btn) btn.className = "bg-dzRed text-white border border-red-600 text-[11px] px-2.5 py-1 rounded-lg font-bold flex items-center gap-1 shadow-md animate-pulse";
+                if (text) text.textContent = "انقر فوق أية نقطة بالخريطة لتحديد الشاحنة (Click Active)";
+                window.showModal("Click Dispatch Mode Active", "Click anywhere on the Admin Map to dispatch a firefighter reinforcement unit.", "📍");
+            } else {
+                if (btn) btn.className = "bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-[11px] px-2.5 py-1 rounded-lg font-bold flex items-center gap-1 shadow-sm";
+                if (text) text.textContent = TR_DICT[window.appState.lang].btnEnableClickDispatch || "تفعيل نشر وحدة بنقرة ماوس";
+            }
+        };
+
+        async function dispatchNewUnitAtCoords(lat, lng) {
+            const officerName = prompt("اسم الضابط أو الفرقة الميدانية المنشورة:", "وحدة الدعم السريع");
+            if (!officerName) return;
+
+            const resourceObj = {
+                id: 'DISP-' + Math.floor(1000 + Math.random() * 9000),
+                officerName: officerName,
+                phone: '0661001122',
+                trucks: 2,
+                planes: 1,
+                brigade: 'دعم مرسل بالماوس',
+                country: window.appState.country,
+                lat: lat,
+                lng: lng,
+                timestamp: Date.now()
+            };
+
+            if (db && navigator.onLine) {
+                try { await addDoc(collection(db, 'resources'), resourceObj); }
+                catch(e) { window.appState.resources.unshift(resourceObj); }
+            } else {
+                window.appState.resources.unshift(resourceObj);
+            }
+
+            adminClickDispatchActive = false;
+            window.toggleAdminMapClickDispatch();
+            window.showModal("Unit Dispatched", `${officerName} deployed to lat: ${lat.toFixed(4)}, lng: ${lng.toFixed(4)}`, "🚒");
+            updateUI();
+        }
+
+        async function updateResourceLocation(fb_id, index, newLat, newLng) {
+            if (fb_id && db && navigator.onLine) {
+                try {
+                    await updateDoc(doc(db, 'resources', fb_id), { lat: newLat, lng: newLng });
+                    window.showModal("Unit Position Updated", `Fire truck updated to GPS (${newLat.toFixed(4)}, ${newLng.toFixed(4)}) in Cloud!`, "📍");
+                } catch(e) {}
+            } else {
+                if (window.appState.resources[index]) {
+                    window.appState.resources[index].lat = newLat;
+                    window.appState.resources[index].lng = newLng;
+                }
+                updateUI();
+                window.showModal("Unit Position Updated", `Fire truck updated to GPS (${newLat.toFixed(4)}, ${newLng.toFixed(4)})`, "📍");
+            }
+        }
+
+        window.focusOnMapCoords = function(lat, lng) {
+            window.switchTab('tab-map');
+            if (window.appState.maps.client) window.appState.maps.client.setView([lat, lng], 13);
+            if (window.appState.maps.admin) window.appState.maps.admin.setView([lat, lng], 13);
+        };
 
         window.toggleMapLayer = function() {
             window.appState.mapSatelliteMode = !window.appState.mapSatelliteMode;
@@ -1987,6 +2191,10 @@
                 }
             });
 
+            // Clear previous tactical polylines
+            tacticalRouteLines.forEach(line => line.remove());
+            tacticalRouteLines = [];
+
             const fireIcon = L.divIcon({
                 className: 'custom-fire-marker',
                 html: `<div class="pulse-flame w-8 h-8 bg-dzRed text-white rounded-full flex items-center justify-center text-sm shadow-lg ring-2 ring-white"><i class="fas fa-fire"></i></div>`,
@@ -1996,34 +2204,61 @@
 
             const truckIcon = L.divIcon({
                 className: 'custom-truck-marker',
-                html: `<div class="w-8 h-8 bg-dzBlue text-white rounded-full flex items-center justify-center text-sm shadow-lg ring-2 ring-white"><i class="fas fa-truck-field"></i></div>`,
+                html: `<div class="w-8 h-8 bg-dzBlue text-white rounded-full flex items-center justify-center text-sm shadow-lg ring-2 ring-white hover:scale-125 transition cursor-grab"><i class="fas fa-truck-field"></i></div>`,
                 iconSize: [32, 32],
                 iconAnchor: [16, 16]
             });
 
+            // Add Fire Incident Markers
             window.appState.reports.forEach(r => {
                 if (r.lat && r.lng) {
                     ['client', 'admin'].forEach(mKey => {
                         const mObj = window.appState.maps[mKey];
                         if (mObj) {
                             const mk = L.marker([r.lat, r.lng], { icon: fireIcon }).addTo(mObj);
-                            mk.bindPopup(`<b>${r.id} - ${r.wilaya}</b><br>${r.severity}`);
+                            mk.bindPopup(`<b>${r.id} - ${r.wilaya}</b><br>${r.severity}<br><span class="text-xs text-slate-500">${r.description || ''}</span>`);
                             window.appState.markers[mKey].push(mk);
                         }
                     });
                 }
             });
 
-            window.appState.resources.forEach(res => {
+            // Add Fire Truck Resource Markers (Draggable on Admin Map!)
+            window.appState.resources.forEach((res, idx) => {
                 if (res.lat && res.lng) {
                     ['client', 'admin'].forEach(mKey => {
                         const mObj = window.appState.maps[mKey];
                         if (mObj) {
-                            const mk = L.marker([res.lat, res.lng], { icon: truckIcon }).addTo(mObj);
-                            mk.bindPopup(`<b>${res.officerName}</b><br>Trucks: ${res.trucks}`);
+                            const isDraggable = (mKey === 'admin');
+                            const mk = L.marker([res.lat, res.lng], { 
+                                icon: truckIcon,
+                                draggable: isDraggable
+                            }).addTo(mObj);
+
+                            mk.bindPopup(`<b>${res.officerName} (${res.brigade || 'CCF'})</b><br>Trucks: ${res.trucks} | Aircraft: ${res.planes}<br><span class="text-[10px] text-blue-600 font-bold">💡 Drag mouse to re-locate unit!</span>`);
+
+                            if (isDraggable) {
+                                mk.on('dragend', function(e) {
+                                    const newPos = e.target.getLatLng();
+                                    updateResourceLocation(res.fb_id, idx, newPos.lat, newPos.lng);
+                                });
+                            }
+
                             window.appState.markers[mKey].push(mk);
                         }
                     });
+
+                    // Draw tactical connection lines from unit to nearest fire on Admin map
+                    if (window.appState.maps.admin && window.appState.reports.length > 0) {
+                        const closestFire = window.appState.reports[0];
+                        if (closestFire.lat && closestFire.lng) {
+                            const polyline = L.polyline([
+                                [res.lat, res.lng],
+                                [closestFire.lat, closestFire.lng]
+                            ], { color: '#1D4ED8', weight: 2, dashArray: '4, 8' }).addTo(window.appState.maps.admin);
+                            tacticalRouteLines.push(polyline);
+                        }
+                    }
                 }
             });
 
@@ -2129,7 +2364,7 @@
             const mapSummaryContainer = document.getElementById('map-reports-summary');
             if (mapSummaryContainer) {
                 mapSummaryContainer.innerHTML = reports.map(r => `
-                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between text-xs">
+                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between text-xs cursor-pointer hover:bg-slate-100 transition" onclick="focusOnMapCoords(${r.lat}, ${r.lng})">
                         <div>
                             <strong class="text-slate-900 font-black block">${r.wilaya} (${r.id})</strong>
                             <span class="text-[11px] text-slate-500">${r.description || ''} • ${r.time || ''}</span>
@@ -2151,28 +2386,44 @@
                             <span class="text-[11px] text-slate-600 block">${r.nom} (${r.phone})</span>
                             <span class="text-[10px] text-slate-500 font-mono">${r.lat ? r.lat.toFixed(4) : ''}, ${r.lng ? r.lng.toFixed(4) : ''}</span>
                         </div>
-                        <a href="tel:${r.phone}" class="bg-dzGreen text-white px-2.5 py-1.5 rounded-lg font-bold text-[11px] flex items-center gap-1 shadow-sm">
-                            <i class="fas fa-phone"></i> Call
-                        </a>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="focusOnMapCoords(${r.lat}, ${r.lng})" class="bg-dzBlue text-white px-2 py-1 rounded text-[10px] font-bold"><i class="fas fa-location-dot"></i></button>
+                            <a href="tel:${r.phone}" class="bg-dzGreen text-white px-2.5 py-1.5 rounded-lg font-bold text-[11px] flex items-center gap-1 shadow-sm">
+                                <i class="fas fa-phone"></i> Call
+                            </a>
+                        </div>
                     </div>
                 `).join('') || `<p class="text-xs text-slate-400 text-center py-4">No active alerts requiring intervention</p>`;
             }
 
-            // Render Officers Roster
+            // Render Officers Roster (PIN masked as •••• by default with toggle & edit options)
             const rosterContainer = document.getElementById('admin-officers-roster-list');
             const rosterBadge = document.getElementById('admin-officers-count-badge');
             if (rosterBadge) rosterBadge.textContent = `${officers.length} Officers`;
             if (rosterContainer) {
                 rosterContainer.innerHTML = officers.map((off, idx) => `
-                    <div class="p-3 bg-blue-50/60 border border-blue-200 rounded-xl flex items-center justify-between text-xs">
+                    <div class="officer-roster-card p-3 bg-blue-50/60 border border-blue-200 rounded-xl flex items-center justify-between text-xs">
                         <div>
                             <strong class="text-slate-900 font-black block">${off.name || off.officerName}</strong>
                             <span class="text-[11px] text-slate-600 block">${off.brigade || 'Unit'} • Tel: ${off.phone}</span>
-                            <span class="text-[10px] bg-blue-100 text-dzBlue px-1.5 py-0.5 rounded font-mono font-bold">PIN: ${off.pin}</span>
+                            <div class="flex items-center gap-1.5 mt-1">
+                                <span class="officer-pin-badge text-[10px] bg-blue-100 text-dzBlue px-2 py-0.5 rounded font-mono font-bold" data-hidden="true">PIN: ••••</span>
+                                <button onclick="toggleShowOfficerPinInRoster(this, '${off.pin}')" class="text-blue-700 hover:text-blue-900 text-[11px] p-0.5">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
                         </div>
-                        <button onclick="deleteOfficer('${off.fb_id || ''}', ${idx})" class="text-red-600 hover:text-red-800 p-1 text-sm">
-                            <i class="fas fa-trash-can"></i>
-                        </button>
+                        <div class="flex items-center gap-1">
+                            <button onclick="updateOfficerPIN('${off.fb_id || ''}', ${idx})" title="Edit PIN Code" class="bg-amber-100 text-amber-800 hover:bg-amber-200 p-1.5 rounded-lg text-xs font-bold transition">
+                                <i class="fas fa-key"></i>
+                            </button>
+                            <a href="tel:${off.phone}" title="Call Officer" class="bg-emerald-100 text-dzGreen hover:bg-emerald-200 p-1.5 rounded-lg text-xs font-bold transition">
+                                <i class="fas fa-phone"></i>
+                            </a>
+                            <button onclick="deleteOfficer('${off.fb_id || ''}', ${idx})" title="Revoke Access" class="bg-red-100 text-red-600 hover:bg-red-200 p-1.5 rounded-lg text-xs font-bold transition">
+                                <i class="fas fa-trash-can"></i>
+                            </button>
+                        </div>
                     </div>
                 `).join('');
             }
@@ -2191,6 +2442,7 @@
                         <p class="text-[11px] text-slate-600">${r.nom} (${r.phone}) • Status: ${r.status}</p>
                         <div class="flex items-center gap-2 pt-1 border-t border-slate-200/60">
                             <button onclick="updateReportStatus('${r.fb_id || ''}', 'Extinguished', ${idx})" class="bg-emerald-600 text-white text-[10px] px-2 py-1 rounded font-bold">Mark Extinguished</button>
+                            <button onclick="focusOnMapCoords(${r.lat}, ${r.lng})" class="bg-dzBlue text-white text-[10px] px-2 py-1 rounded font-bold">Zoom Map</button>
                             <button onclick="deleteReport('${r.fb_id || ''}', ${idx})" class="bg-red-600 text-white text-[10px] px-2 py-1 rounded font-bold">Delete</button>
                         </div>
                     </div>
@@ -2207,10 +2459,14 @@
                         <div>
                             <strong class="text-slate-900 font-black block">${res.officerName}</strong>
                             <span class="text-[11px] text-slate-600 block">${res.brigade} • Trucks: ${res.trucks} | Planes: ${res.planes}</span>
+                            <span class="text-[10px] text-slate-400 font-mono">GPS: ${res.lat ? res.lat.toFixed(4) : ''}, ${res.lng ? res.lng.toFixed(4) : ''}</span>
                         </div>
-                        <button onclick="deleteResource('${res.fb_id || ''}', ${idx})" class="text-red-600 hover:text-red-800 text-sm p-1">
-                            <i class="fas fa-trash-can"></i>
-                        </button>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="focusOnMapCoords(${res.lat}, ${res.lng})" class="bg-dzBlue text-white text-[10px] px-2 py-1 rounded font-bold">Locate</button>
+                            <button onclick="deleteResource('${res.fb_id || ''}', ${idx})" class="text-red-600 hover:text-red-800 text-sm p-1">
+                                <i class="fas fa-trash-can"></i>
+                            </button>
+                        </div>
                     </div>
                 `).join('');
             }
