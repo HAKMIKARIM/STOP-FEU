@@ -100,7 +100,7 @@
             <div>
                 <div class="flex items-center gap-2">
                     <h1 class="font-black text-lg sm:text-xl tracking-wide text-slate-900">STOP FEU</h1>
-                    <span id="country-badge" class="bg-dzGreen/10 text-dzGreen border border-dzGreen/30 text-[10px] px-2 py-0.5 rounded-full font-black tracking-wider">الجزائر</span>
+                    <span id="country-badge" class="bg-dzGreen/10 text-dzGreen border border-dzGreen/30 text-[10px] px-2 py-0.5 rounded-full font-black tracking-wider">🇩🇿 الجزائر</span>
                 </div>
                 <p id="sub-header-title" class="text-[11px] text-slate-500 font-bold">الحماية المدنية • إدارة الأزمات والوقاية من حرائق الغابات</p>
             </div>
@@ -284,7 +284,7 @@
                                 <span><i class="fas fa-satellite text-emerald-600"></i> <span data-i18n="gpsLiveWatch">التتبع المستمر للموقع</span></span>
                             </label>
 
-                            <button type="button" onclick="showGPSHelpModal()" class="text-slate-500 hover:text-dzRed text-[11px] font-bold underline flex items-center gap-1">
+                            <button type="button" onclick="document.getElementById('gps-help-modal').classList.remove('hidden')" class="text-slate-500 hover:text-dzRed text-[11px] font-bold underline flex items-center gap-1">
                                 <i class="fas fa-circle-question text-dzAmber"></i> <span data-i18n="gpsHelp">تعليمات الـ GPS</span>
                             </button>
                         </div>
@@ -758,8 +758,8 @@
                             <p class="text-[10px] text-slate-500" data-i18n="roleOfficerSub">محمية برقم الهاتف والرمز السري (PIN)</p>
                         </div>
                     </div>
-                    <input type="tel" id="login-officer-phone" placeholder="رقم هاتف الضابط" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs text-slate-800 outline-none font-semibold">
-                    <input type="password" id="login-officer-pin" placeholder="الرمز السري (PIN)" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs text-slate-800 outline-none font-mono tracking-widest">
+                    <input type="tel" id="login-officer-phone" placeholder="رقم هاتف الضابط (0661001122)" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs text-slate-800 outline-none font-semibold">
+                    <input type="password" id="login-officer-pin" placeholder="الرمز السري PIN (2026)" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs text-slate-800 outline-none font-mono tracking-widest">
                     <button onclick="verifyAndSetOfficerRole()" class="w-full bg-dzBlue hover:bg-blue-700 text-white font-bold py-2 rounded-lg text-xs transition flex items-center justify-center gap-1.5 shadow-sm">
                         <i class="fas fa-key"></i> <span data-i18n="btnLoginOfficer">دخول لوحة الضابط</span>
                     </button>
@@ -801,7 +801,6 @@
             measurementId: "G-RRR96EVB20"
         };
 
-        const DIRECT_COMMAND_WHATSAPP = "213798924956";
         const ULTRAMSG_TOKEN = "ax7mhaerrvu7r64k";
         const ULTRAMSG_INSTANCE = "instance186581";
         const ULTRAMSG_API_URL = `https://api.ultramsg.com/${ULTRAMSG_INSTANCE}/messages/chat`;
@@ -1284,7 +1283,9 @@
             gpsActive: false,
             reports: [],
             resources: [],
-            officers: [],
+            officers: [
+                { name: 'النقيب منصور', phone: '0661001122', brigade: 'وحدة التدخل السريع', pin: '2026', country: 'dz' }
+            ],
             broadcasts: [],
             offlineQueue: [],
             maps: { client: null, admin: null },
@@ -1364,16 +1365,6 @@
             return cleaned;
         }
 
-        function calculateDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371;
-            const dLat = (lat2 - lat1) * Math.PI / 180;
-            const dLon = (lon2 - lon1) * Math.PI / 180;
-            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
-            return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
-        }
-
         window.playEmergencySiren = function() {
             try {
                 const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -1398,16 +1389,92 @@
             } catch(e) {}
         };
 
-        window.addEventListener('load', () => {
-            initFirebase();
-            initMaps();
-            window.changeCountry('dz');
-            window.changeLanguage('ar');
-            window.requestGPSLocation(false);
-            initAnalyticsCharts();
-            checkVerifiedPhoneState();
-            setupNetworkListeners();
-        });
+        window.showModal = function(title, desc, icon = '✅') {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-desc').textContent = desc;
+            document.getElementById('modal-icon').textContent = icon;
+            document.getElementById('custom-modal')?.classList.remove('hidden');
+        };
+
+        window.closeModal = function() { document.getElementById('custom-modal')?.classList.add('hidden'); };
+        window.showBroadcastSirenModal = function(text) {
+            document.getElementById('broadcast-siren-text').textContent = text;
+            document.getElementById('broadcast-siren-modal')?.classList.remove('hidden');
+        };
+        window.closeBroadcastSirenModal = function() { document.getElementById('broadcast-siren-modal')?.classList.add('hidden'); };
+        window.openLoginModal = function() { document.getElementById('login-modal')?.classList.remove('hidden'); };
+
+        window.setRole = function(role) {
+            if (role === 'admin') {
+                const pwd = document.getElementById('login-admin-pwd')?.value.trim();
+                if (pwd !== '15041978') {
+                    window.showModal("Access Denied", "Incorrect Admin Password (15041978)", "❌");
+                    return;
+                }
+            }
+            window.appState.role = role;
+            const roleBadgeText = document.getElementById('role-text');
+            const navOfficer = document.getElementById('nav-officer');
+            const navAdmin = document.getElementById('nav-admin');
+
+            if (role === 'citizen') {
+                if (roleBadgeText) roleBadgeText.textContent = TR_DICT[window.appState.lang].roleCitizen;
+                navOfficer?.classList.add('hidden');
+                navAdmin?.classList.add('hidden');
+                window.switchTab('tab-report');
+            } else if (role === 'officer') {
+                if (roleBadgeText) roleBadgeText.textContent = TR_DICT[window.appState.lang].roleOfficer;
+                navOfficer?.classList.remove('hidden');
+                navAdmin?.classList.add('hidden');
+                window.switchTab('tab-officer');
+            } else if (role === 'admin') {
+                if (roleBadgeText) roleBadgeText.textContent = TR_DICT[window.appState.lang].roleAdmin;
+                navOfficer?.classList.remove('hidden');
+                navAdmin?.classList.remove('hidden');
+                window.switchTab('tab-admin');
+            }
+            document.getElementById('login-modal')?.classList.add('hidden');
+        };
+
+        window.verifyAndSetOfficerRole = function() {
+            const phoneInput = document.getElementById('login-officer-phone')?.value.trim();
+            const pinInput = document.getElementById('login-officer-pin')?.value.trim();
+
+            if (!phoneInput || !pinInput) {
+                window.showModal("Incomplete Login", "Please enter both Phone Number and PIN Code.", "⚠️");
+                return;
+            }
+
+            const cleanPhone = formatPhoneNumber(phoneInput);
+            let matchedOfficer = window.appState.officers.find(o => 
+                (formatPhoneNumber(o.phone) === cleanPhone || o.phone === phoneInput) && o.pin === pinInput
+            );
+
+            // Fallback default officer for emergency demo (Captain Mansour: 0661001122 / PIN: 2026)
+            if (!matchedOfficer && (phoneInput === '0661001122' || cleanPhone === '213661001122') && pinInput === '2026') {
+                matchedOfficer = { name: 'النقيب منصور', phone: phoneInput, brigade: 'وحدة التدخل السريع' };
+            }
+
+            if (matchedOfficer) {
+                window.appState.officerInfo = {
+                    name: matchedOfficer.name || matchedOfficer.officerName || 'ضابط ميداني',
+                    phone: phoneInput
+                };
+
+                const nameInput = document.getElementById('officer-name-input');
+                const phoneField = document.getElementById('officer-phone-input');
+                const brigadeInput = document.getElementById('res-brigade');
+
+                if (nameInput) nameInput.value = window.appState.officerInfo.name;
+                if (phoneField) phoneField.value = window.appState.officerInfo.phone;
+                if (brigadeInput && matchedOfficer.brigade) brigadeInput.value = matchedOfficer.brigade;
+
+                window.setRole('officer');
+                window.showModal("Officer Authenticated", `Welcome ${window.appState.officerInfo.name}`, "🫡");
+            } else {
+                window.showModal("Access Denied", "Invalid Phone or PIN code.", "❌");
+            }
+        };
 
         window.requestGPSLocation = function(notifyUser = true) {
             const coordsDisplay = document.getElementById('gps-coords-display');
@@ -1534,7 +1601,7 @@
             onSnapshot(collection(db, 'officers'), (snapshot) => {
                 const cloudOfficers = snapshot.docs.map(d => ({ fb_id: d.id, ...d.data() }));
                 cloudOfficers.sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
-                window.appState.officers = cloudOfficers;
+                if (cloudOfficers.length > 0) window.appState.officers = cloudOfficers;
                 updateUI();
             });
 
@@ -1651,6 +1718,204 @@
             window.clearPhoto();
         };
 
+        window.handleResourceSubmit = async function(event) {
+            event.preventDefault();
+            const name = document.getElementById('officer-name-input')?.value.trim();
+            const phone = document.getElementById('officer-phone-input')?.value.trim();
+            const trucks = parseInt(document.getElementById('res-trucks')?.value) || 0;
+            const planes = parseInt(document.getElementById('res-air')?.value) || 0;
+            const brigade = document.getElementById('res-brigade')?.value.trim() || 'Rapid Intervention Unit';
+
+            const resourceData = {
+                id: 'RES-' + Math.floor(1000 + Math.random() * 9000),
+                officerName: name,
+                phone: phone,
+                trucks: trucks,
+                planes: planes,
+                brigade: brigade,
+                country: window.appState.country,
+                lat: window.appState.userCoords.lat,
+                lng: window.appState.userCoords.lng,
+                timestamp: Date.now()
+            };
+
+            if (db && navigator.onLine) {
+                try { await addDoc(collection(db, 'resources'), resourceData); }
+                catch (e) { window.appState.resources.unshift(resourceData); }
+            } else {
+                window.appState.resources.unshift(resourceData);
+            }
+
+            window.showModal("Fleet Registered", "Field position and assets successfully registered.", "🚒");
+            updateUI();
+        };
+
+        window.handleAddAuthorizedOfficer = async function(event) {
+            event.preventDefault();
+            const name = document.getElementById('admin-add-off-name')?.value.trim();
+            const phone = document.getElementById('admin-add-off-phone')?.value.trim();
+            const brigade = document.getElementById('admin-add-off-brigade')?.value.trim() || 'Intervention Unit';
+            const pin = document.getElementById('admin-add-off-pin')?.value.trim();
+
+            if (!name || !phone || !pin) {
+                window.showModal("Incomplete Data", "Name, Phone and PIN are required.", "⚠️");
+                return;
+            }
+
+            const officerObj = {
+                name: name,
+                phone: phone,
+                brigade: brigade,
+                pin: pin,
+                country: window.appState.country,
+                createdAt: Date.now()
+            };
+
+            if (db && navigator.onLine) {
+                try { await addDoc(collection(db, 'officers'), officerObj); }
+                catch (e) { window.appState.officers.unshift(officerObj); }
+            } else {
+                window.appState.officers.unshift(officerObj);
+            }
+
+            window.showModal("Officer Authorized", `${name} granted access with PIN: ${pin}`, "🔑");
+            event.target.reset();
+            updateUI();
+        };
+
+        window.sendAdminGlobalBroadcast = async function() {
+            const msgInput = document.getElementById('admin-broadcast-msg');
+            const msg = msgInput?.value.trim();
+            if (!msg) {
+                window.showModal("Empty Message", "Please type a broadcast message.", "⚠️");
+                return;
+            }
+
+            const broadcastData = {
+                message: msg,
+                country: window.appState.country,
+                timestamp: Date.now()
+            };
+
+            if (db && navigator.onLine) {
+                try { await addDoc(collection(db, 'broadcasts'), broadcastData); }
+                catch (e) {
+                    window.playEmergencySiren();
+                    showBroadcastSirenModal(msg);
+                }
+            } else {
+                window.playEmergencySiren();
+                showBroadcastSirenModal(msg);
+            }
+
+            if (msgInput) msgInput.value = '';
+            window.showModal("Broadcast Sent", "Emergency broadcast transmitted to all live sessions.", "📡");
+        };
+
+        window.testCloudWrite = async function() {
+            if (!db || !navigator.onLine) {
+                window.showModal("Offline", "Cloud connection unavailable right now.", "📡");
+                return;
+            }
+            try {
+                await addDoc(collection(db, 'reports'), {
+                    id: 'TEST-' + Math.floor(100 + Math.random() * 899),
+                    nom: 'Diagnostic System Test',
+                    phone: '0000000000',
+                    verifiedWhatsApp: true,
+                    country: window.appState.country,
+                    wilaya: 'System Test',
+                    severity: 'ضعيف',
+                    description: 'Automated Firestore connectivity verification test.',
+                    lat: window.appState.userCoords.lat,
+                    lng: window.appState.userCoords.lng,
+                    status: 'Diagnostic',
+                    time: new Date().toLocaleTimeString(),
+                    timestamp: Date.now()
+                });
+                window.showModal("Firestore Diagnostic", "Test write succeeded on Firestore collection 'reports'!", "⚡");
+            } catch(err) {
+                window.showModal("Write Failed", err.message, "❌");
+            }
+        };
+
+        window.reconnectCloudAndSync = function() {
+            syncOfflineQueue();
+            syncFirebaseData();
+            window.showModal("Cloud Sync", "Attempting to re-sync Firestore real-time listeners and offline queue.", "🔄");
+        };
+
+        window.exportDataJSON = function() {
+            const exportData = {
+                reports: window.appState.reports,
+                resources: window.appState.resources,
+                officers: window.appState.officers,
+                exportDate: new Date().toISOString()
+            };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `stop_feu_backup_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        };
+
+        window.importDataJSON = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported.reports) window.appState.reports = imported.reports;
+                    if (imported.resources) window.appState.resources = imported.resources;
+                    if (imported.officers) window.appState.officers = imported.officers;
+                    updateUI();
+                    window.showModal("Backup Restored", "Data backup successfully restored.", "📦");
+                } catch(err) {
+                    window.showModal("Import Error", "Failed to parse JSON file.", "❌");
+                }
+            };
+            reader.readAsText(file);
+        };
+
+        window.deleteReport = async function(fb_id, index) {
+            if (fb_id && db && navigator.onLine) {
+                try { await deleteDoc(doc(db, 'reports', fb_id)); } catch(e) {}
+            } else {
+                window.appState.reports.splice(index, 1);
+                updateUI();
+            }
+        };
+
+        window.updateReportStatus = async function(fb_id, newStatus, index) {
+            if (fb_id && db && navigator.onLine) {
+                try { await updateDoc(doc(db, 'reports', fb_id), { status: newStatus }); } catch(e) {}
+            } else {
+                if (window.appState.reports[index]) window.appState.reports[index].status = newStatus;
+                updateUI();
+            }
+        };
+
+        window.deleteResource = async function(fb_id, index) {
+            if (fb_id && db && navigator.onLine) {
+                try { await deleteDoc(doc(db, 'resources', fb_id)); } catch(e) {}
+            } else {
+                window.appState.resources.splice(index, 1);
+                updateUI();
+            }
+        };
+
+        window.deleteOfficer = async function(fb_id, index) {
+            if (fb_id && db && navigator.onLine) {
+                try { await deleteDoc(doc(db, 'officers', fb_id)); } catch(e) {}
+            } else {
+                window.appState.officers.splice(index, 1);
+                updateUI();
+            }
+        };
+
         window.runAIAnalysis = async function() {
             const aiResult = document.getElementById('ai-result');
             const aiLoading = document.getElementById('ai-loading');
@@ -1665,9 +1930,7 @@
                 const reports = window.appState.reports;
                 const resources = window.appState.resources;
 
-                const activeCount = reports.filter(r => r.status !== 'Extinguished').length;
                 const criticalCount = reports.filter(r => r.severity === 'حرج' || r.severity === 'Critique' || r.severity === 'Critical').length;
-
                 const isFr = window.appState.lang === 'fr';
                 const isEn = window.appState.lang === 'en';
 
@@ -1763,6 +2026,9 @@
                     });
                 }
             });
+
+            const activeCountLabel = document.getElementById('active-map-pins-count');
+            if (activeCountLabel) activeCountLabel.textContent = `${window.appState.reports.length} Incidents Displayed`;
         }
 
         window.recenterMap = function() {
@@ -1799,53 +2065,6 @@
                 if (window.appState?.maps?.client) window.appState.maps.client.invalidateSize();
                 if (window.appState?.maps?.admin) window.appState.maps.admin.invalidateSize();
             }, 200);
-        };
-
-        window.showModal = function(title, desc, icon = '✅') {
-            document.getElementById('modal-title').textContent = title;
-            document.getElementById('modal-desc').textContent = desc;
-            document.getElementById('modal-icon').textContent = icon;
-            document.getElementById('custom-modal')?.classList.remove('hidden');
-        };
-
-        window.closeModal = function() { document.getElementById('custom-modal')?.classList.add('hidden'); };
-        window.showBroadcastSirenModal = function(text) {
-            document.getElementById('broadcast-siren-text').textContent = text;
-            document.getElementById('broadcast-siren-modal')?.classList.remove('hidden');
-        };
-        window.closeBroadcastSirenModal = function() { document.getElementById('broadcast-siren-modal')?.classList.add('hidden'); };
-        window.openLoginModal = function() { document.getElementById('login-modal')?.classList.remove('hidden'); };
-
-        window.setRole = function(role) {
-            if (role === 'admin') {
-                const pwd = document.getElementById('login-admin-pwd')?.value.trim();
-                if (pwd !== '15041978') {
-                    window.showModal("Access Denied", "Incorrect Admin Password", "❌");
-                    return;
-                }
-            }
-            window.appState.role = role;
-            const roleBadgeText = document.getElementById('role-text');
-            const navOfficer = document.getElementById('nav-officer');
-            const navAdmin = document.getElementById('nav-admin');
-
-            if (role === 'citizen') {
-                if (roleBadgeText) roleBadgeText.textContent = TR_DICT[window.appState.lang].roleCitizen;
-                navOfficer?.classList.add('hidden');
-                navAdmin?.classList.add('hidden');
-                window.switchTab('tab-report');
-            } else if (role === 'officer') {
-                if (roleBadgeText) roleBadgeText.textContent = TR_DICT[window.appState.lang].roleOfficer;
-                navOfficer?.classList.remove('hidden');
-                navAdmin?.classList.add('hidden');
-                window.switchTab('tab-officer');
-            } else if (role === 'admin') {
-                if (roleBadgeText) roleBadgeText.textContent = TR_DICT[window.appState.lang].roleAdmin;
-                navOfficer?.classList.remove('hidden');
-                navAdmin?.classList.remove('hidden');
-                window.switchTab('tab-admin');
-            }
-            document.getElementById('login-modal')?.classList.add('hidden');
         };
 
         window.previewPhoto = function(event) {
@@ -1900,11 +2119,13 @@
             updateMapMarkers();
             const reports = window.appState.reports;
             const resources = window.appState.resources;
+            const officers = window.appState.officers;
 
             document.getElementById('stat-total-fires').textContent = reports.length;
             document.getElementById('stat-verified-citizens').textContent = reports.filter(r => r.verifiedWhatsApp).length;
             document.getElementById('stat-total-vehicles').textContent = resources.reduce((acc, curr) => acc + (curr.trucks || 0) + (curr.planes || 0), 0);
 
+            // Render Map Summary Log
             const mapSummaryContainer = document.getElementById('map-reports-summary');
             if (mapSummaryContainer) {
                 mapSummaryContainer.innerHTML = reports.map(r => `
@@ -1915,9 +2136,113 @@
                         </div>
                         <span class="bg-red-100 text-dzRed px-2 py-1 rounded text-[10px] font-bold">${r.severity}</span>
                     </div>
+                `).join('') || `<p class="text-xs text-slate-400 text-center py-4">No active fire reports logged</p>`;
+            }
+
+            // Render Officer Active Alerts
+            const officerAlertsContainer = document.getElementById('officer-reports-list');
+            const officerAlertCount = document.getElementById('officer-alert-count');
+            if (officerAlertCount) officerAlertCount.textContent = `${reports.length} Active`;
+            if (officerAlertsContainer) {
+                officerAlertsContainer.innerHTML = reports.map(r => `
+                    <div class="p-3 bg-red-50/80 border border-red-200 rounded-xl flex items-center justify-between text-xs gap-2">
+                        <div>
+                            <strong class="text-slate-900 font-black block">${r.wilaya} - ${r.id} (${r.severity})</strong>
+                            <span class="text-[11px] text-slate-600 block">${r.nom} (${r.phone})</span>
+                            <span class="text-[10px] text-slate-500 font-mono">${r.lat ? r.lat.toFixed(4) : ''}, ${r.lng ? r.lng.toFixed(4) : ''}</span>
+                        </div>
+                        <a href="tel:${r.phone}" class="bg-dzGreen text-white px-2.5 py-1.5 rounded-lg font-bold text-[11px] flex items-center gap-1 shadow-sm">
+                            <i class="fas fa-phone"></i> Call
+                        </a>
+                    </div>
+                `).join('') || `<p class="text-xs text-slate-400 text-center py-4">No active alerts requiring intervention</p>`;
+            }
+
+            // Render Officers Roster
+            const rosterContainer = document.getElementById('admin-officers-roster-list');
+            const rosterBadge = document.getElementById('admin-officers-count-badge');
+            if (rosterBadge) rosterBadge.textContent = `${officers.length} Officers`;
+            if (rosterContainer) {
+                rosterContainer.innerHTML = officers.map((off, idx) => `
+                    <div class="p-3 bg-blue-50/60 border border-blue-200 rounded-xl flex items-center justify-between text-xs">
+                        <div>
+                            <strong class="text-slate-900 font-black block">${off.name || off.officerName}</strong>
+                            <span class="text-[11px] text-slate-600 block">${off.brigade || 'Unit'} • Tel: ${off.phone}</span>
+                            <span class="text-[10px] bg-blue-100 text-dzBlue px-1.5 py-0.5 rounded font-mono font-bold">PIN: ${off.pin}</span>
+                        </div>
+                        <button onclick="deleteOfficer('${off.fb_id || ''}', ${idx})" class="text-red-600 hover:text-red-800 p-1 text-sm">
+                            <i class="fas fa-trash-can"></i>
+                        </button>
+                    </div>
                 `).join('');
             }
+
+            // Render Admin Reports List
+            const adminReportsContainer = document.getElementById('admin-reports-list');
+            const adminReportsCount = document.getElementById('admin-reports-count');
+            if (adminReportsCount) adminReportsCount.textContent = reports.length;
+            if (adminReportsContainer) {
+                adminReportsContainer.innerHTML = reports.map((r, idx) => `
+                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs space-y-1.5">
+                        <div class="flex items-center justify-between">
+                            <strong class="text-slate-900 font-black">${r.id} - ${r.wilaya}</strong>
+                            <span class="bg-red-100 text-dzRed px-2 py-0.5 rounded text-[10px] font-bold">${r.severity}</span>
+                        </div>
+                        <p class="text-[11px] text-slate-600">${r.nom} (${r.phone}) • Status: ${r.status}</p>
+                        <div class="flex items-center gap-2 pt-1 border-t border-slate-200/60">
+                            <button onclick="updateReportStatus('${r.fb_id || ''}', 'Extinguished', ${idx})" class="bg-emerald-600 text-white text-[10px] px-2 py-1 rounded font-bold">Mark Extinguished</button>
+                            <button onclick="deleteReport('${r.fb_id || ''}', ${idx})" class="bg-red-600 text-white text-[10px] px-2 py-1 rounded font-bold">Delete</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Render Admin Resources List
+            const adminResourcesContainer = document.getElementById('admin-resources-list');
+            const adminResourcesCount = document.getElementById('admin-resources-count');
+            if (adminResourcesCount) adminResourcesCount.textContent = resources.length;
+            if (adminResourcesContainer) {
+                adminResourcesContainer.innerHTML = resources.map((res, idx) => `
+                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs flex items-center justify-between">
+                        <div>
+                            <strong class="text-slate-900 font-black block">${res.officerName}</strong>
+                            <span class="text-[11px] text-slate-600 block">${res.brigade} • Trucks: ${res.trucks} | Planes: ${res.planes}</span>
+                        </div>
+                        <button onclick="deleteResource('${res.fb_id || ''}', ${idx})" class="text-red-600 hover:text-red-800 text-sm p-1">
+                            <i class="fas fa-trash-can"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+
+            // Update Analytics Charts
+            if (chartSeverityInstance) {
+                const low = reports.filter(r => r.severity === 'ضعيف' || r.severity === 'Faible' || r.severity === 'Low').length;
+                const med = reports.filter(r => r.severity === 'متوسط' || r.severity === 'Moyen' || r.severity === 'Medium').length;
+                const high = reports.filter(r => r.severity === 'حرج' || r.severity === 'Critique' || r.severity === 'Critical').length;
+                chartSeverityInstance.data.datasets[0].data = [low, med, high];
+                chartSeverityInstance.update();
+            }
+
+            if (chartWilayasInstance) {
+                const regionCounts = {};
+                reports.forEach(r => { if (r.wilaya) regionCounts[r.wilaya] = (regionCounts[r.wilaya] || 0) + 1; });
+                chartWilayasInstance.data.labels = Object.keys(regionCounts).slice(0, 5);
+                chartWilayasInstance.data.datasets[0].data = Object.values(regionCounts).slice(0, 5);
+                chartWilayasInstance.update();
+            }
         }
+
+        window.addEventListener('load', () => {
+            initFirebase();
+            initMaps();
+            window.changeCountry('dz');
+            window.changeLanguage('ar');
+            window.requestGPSLocation(false);
+            initAnalyticsCharts();
+            checkVerifiedPhoneState();
+            setupNetworkListeners();
+        });
     </script>
 </body>
 </html>
