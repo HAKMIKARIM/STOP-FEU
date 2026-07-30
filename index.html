@@ -6,12 +6,12 @@
     <title>STOP FEU - International Wildfire Early Warning & Tactical Command System</title>
 
     <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RRR96EVB20"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-2DB1069DB7"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-RRR96EVB20');
+      gtag('config', 'G-2DB1069DB7');
     </script>
 
     <!-- Tailwind CSS CDN -->
@@ -836,6 +836,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { initializeFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
 
         // Firebase Config
         const firebaseConfig = {
@@ -845,7 +846,7 @@
             storageBucket: "indrive-95741.firebasestorage.app",
             messagingSenderId: "259781133250",
             appId: "1:259781133250:web:920afd93f3024171afcc5b",
-            measurementId: "G-RRR96EVB20"
+            measurementId: "G-2DB1069DB7"
         };
 
         const ULTRAMSG_TOKEN = "ax7mhaerrvu7r64k";
@@ -1332,7 +1333,7 @@
         };
 
         // Application Global State
-        let app, db, auth, currentUser;
+        let app, db, auth, analytics, currentUser;
         let generatedOTP = null;
         let isWhatsAppVerified = false;
         let chartSeverityInstance = null;
@@ -1633,6 +1634,7 @@
         async function initFirebase() {
             try {
                 app = initializeApp(firebaseConfig);
+                analytics = getAnalytics(app);
                 auth = getAuth(app);
                 db = initializeFirestore(app, { experimentalAutoDetectLongPolling: true });
 
