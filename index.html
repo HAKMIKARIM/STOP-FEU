@@ -5,13 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>STOP FEU - International Wildfire Early Warning & Tactical Command System</title>
 
-    <!-- Google Analytics -->
+    <!-- Google Analytics (GA4) with Debug Mode enabled for instant Realtime testing -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2DB1069DB7"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-2DB1069DB7');
+      
+      // Send pageview with debug_mode enabled to view hits instantly in GA4 DebugView & Realtime
+      gtag('config', 'G-2DB1069DB7', {
+        'send_page_view': true,
+        'debug_mode': true,
+        'cookie_flags': 'max-age=7200;secure;samesite=none'
+      });
     </script>
 
     <!-- Tailwind CSS CDN -->
@@ -836,9 +842,9 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { initializeFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
+        import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-analytics.js";
 
-        // Firebase Config
+        // Firebase Config with correct Measurement ID G-2DB1069DB7
         const firebaseConfig = {
             apiKey: "AIzaSyA-ym_XLB2XXXFdRcNYzzfiGlaypoMmQ0U",
             authDomain: "indrive-95741.firebaseapp.com",
@@ -1634,7 +1640,11 @@
         async function initFirebase() {
             try {
                 app = initializeApp(firebaseConfig);
+                
+                // Initialize Firebase Analytics explicitly with measurement ID G-2DB1069DB7
                 analytics = getAnalytics(app);
+                logEvent(analytics, 'app_initialized', { app_name: 'STOP_FEU_DZ' });
+
                 auth = getAuth(app);
                 db = initializeFirestore(app, { experimentalAutoDetectLongPolling: true });
 
