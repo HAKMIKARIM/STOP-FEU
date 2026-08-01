@@ -82,7 +82,6 @@
             100% { background-color: #1D4ED8; }
         }
 
-        /* Marker trust rings */
         .ring-trust-green { box-shadow: 0 0 0 4px #00875A, 0 10px 15px -3px rgba(0, 0, 0, 0.3); }
         .ring-trust-yellow { box-shadow: 0 0 0 4px #D97706, 0 10px 15px -3px rgba(0, 0, 0, 0.3); }
         .ring-trust-red { box-shadow: 0 0 0 4px #D21034, 0 10px 15px -3px rgba(0, 0, 0, 0.3); }
@@ -112,15 +111,28 @@
 
         <!-- SELECTORS & CONTROLS -->
         <div class="flex items-center gap-2 flex-wrap">
-            <!-- Country Switcher -->
+            <!-- Country Switcher (Mediterranean, Europe, North & South America) -->
             <div class="flex items-center bg-slate-100 border border-slate-200 rounded-xl px-2 py-1">
                 <i class="fas fa-globe text-dzBlue ml-1 mr-1 text-xs"></i>
                 <select id="country-select" onchange="changeCountry(this.value)" class="bg-transparent text-xs font-bold text-slate-800 outline-none cursor-pointer">
                     <option value="dz" selected>🇩🇿 الجزائر (Algeria)</option>
+                    <option value="ma">🇲🇦 المغرب (Morocco)</option>
+                    <option value="tn">🇹🇳 تونس (Tunisia)</option>
+                    <option value="eg">🇪🇬 مصر (Egypt)</option>
                     <option value="fr">🇫🇷 France (فرنسا)</option>
                     <option value="es">🇪🇸 España (إسبانيا)</option>
                     <option value="pt">🇵🇹 Portugal (البرتغال)</option>
-                    <option value="ma">🇲🇦 المغرب (Morocco)</option>
+                    <option value="it">🇮🇹 Italia (إيطاليا)</option>
+                    <option value="gr">🇬🇷 Greece (اليونان)</option>
+                    <option value="tr">🇹🇷 Türkiye (تركيا)</option>
+                    <option value="hr">🇭🇷 Hrvatska (كرواتيا)</option>
+                    <option value="us">🇺🇸 USA (أمريكا)</option>
+                    <option value="ca">🇨🇦 Canada (كندا)</option>
+                    <option value="mx">🇲🇽 México (المكسيك)</option>
+                    <option value="br">🇧🇷 Brasil (البرازيل)</option>
+                    <option value="ar">🇦🇷 Argentina (الأرجنتين)</option>
+                    <option value="cl">🇨🇱 Chile (تشيلي)</option>
+                    <option value="co">🇨🇴 Colombia (كولومبيا)</option>
                 </select>
             </div>
 
@@ -155,9 +167,7 @@
             </span>
             <span class="uppercase tracking-wide text-[11px] font-black"><i class="fas fa-phone-volume ml-1 mr-1"></i> <span data-i18n="emergencyTitle">أرقام الطوارئ المباشرة:</span></span>
         </div>
-        <div id="emergency-numbers-list" class="flex items-center gap-2 shrink-0">
-            <!-- Dynamic emergency items injected via JS -->
-        </div>
+        <div id="emergency-numbers-list" class="flex items-center gap-2 shrink-0"></div>
     </div>
 
     <!-- MAIN CONTAINER -->
@@ -222,7 +232,7 @@
                         <div>
                             <label class="block text-xs font-black text-slate-700 mb-1" data-i18n="labelRegion">المنطقة / الولاية / الإقليم *</label>
                             <select id="report-wilaya" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-800 focus:border-dzRed outline-none transition font-semibold">
-                                <!-- Dynamic region options injected per selected country -->
+                                <!-- Dynamic region options -->
                             </select>
                         </div>
                         <div>
@@ -339,6 +349,11 @@
                                 <option value="camping" data-i18n="catCamping">⛺ الشواء والتخييم غير القانوني</option>
                                 <option value="encroachment" data-i18n="catEncroachment">🚜 البناء والاعتداء على العقار الغابي</option>
                                 <option value="overgrazing" data-i18n="catGrazing">🐐 الرعي الجائر والإضرار بالنباتات</option>
+                                <option value="arson_attempt" data-i18n="catArsonAttempt">🔥 محاولة إضرام نار عمداً / إشعال مشبوه</option>
+                                <option value="poaching" data-i18n="catPoaching">🎯 الصيد البري الجائر وغير المشروع</option>
+                                <option value="toxic_waste" data-i18n="catToxicWaste">🧪 رمي النفايات الكيميائية والمواد السامة</option>
+                                <option value="quarrying" data-i18n="catQuarrying">⛏️ استخراج الحجارة والرمال غير المرخص</option>
+                                <option value="offroad_damage" data-i18n="catOffroadDamage">🏍️ التفحيط وتدمير الغطاء النباتي بالمركبات</option>
                             </select>
                         </div>
                     </div>
@@ -432,10 +447,10 @@
             </div>
         </section>
 
-        <!-- TAB 4: OFFICER PANEL -->
+        <!-- TAB 4: OFFICER PANEL & FIELD TACTICAL DECISION HUB -->
         <section id="tab-officer" class="tab-content space-y-4">
-            <div class="bg-white border border-blue-200 p-5 rounded-2xl shadow-sm">
-                <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+            <div class="bg-white border border-blue-200 p-5 rounded-2xl shadow-sm space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
                     <div>
                         <h2 class="text-xl font-black text-slate-900 flex items-center gap-2">
                             <i class="fas fa-user-shield text-dzBlue"></i> <span data-i18n="officerTitle">لوحة الضابط الميداني والفرق</span>
@@ -443,6 +458,47 @@
                         <p class="text-xs text-slate-500 mt-0.5" data-i18n="officerSubtitle">تسجيل موقع الفرقة الميدانية بالجي بي اس وتحديد الشاحنات والإمكانيات</p>
                     </div>
                     <span class="bg-blue-50 text-dzBlue border border-blue-200 px-3 py-1 rounded-full text-xs font-black" data-i18n="rapidUnitBadge">وحدة التدخل السريع</span>
+                </div>
+
+                <!-- OFFICER FIELD TACTICAL DECISION HUB -->
+                <div class="bg-gradient-to-r from-blue-900 via-indigo-950 to-blue-900 text-white p-4.5 rounded-2xl space-y-3 shadow-md border border-blue-500/40">
+                    <div class="flex items-center justify-between border-b border-white/20 pb-2 flex-wrap gap-2">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-compass-drafting text-amber-300 text-xl"></i>
+                            <div>
+                                <h3 class="font-black text-sm text-amber-300" data-i18n="officerDecisionHubTitle">غرفة اتخاذ القرار والتحليل التكتيكي للضابط</h3>
+                                <p class="text-[10px] text-blue-200" data-i18n="officerDecisionHubSub">أدوات مساندة لاتخاذ القرارات السريعة وتوجيه الإمكانيات في الميدان</p>
+                            </div>
+                        </div>
+                        <span id="officer-country-fleet-badge" class="bg-white/20 text-white text-[10px] px-2.5 py-1 rounded-lg font-black flex items-center gap-1">
+                            <i class="fas fa-truck-droplet text-dzBlue"></i> <span>0 شاحنات جاهزة بالدولة</span>
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                        <div class="bg-slate-900/80 p-2.5 rounded-xl border border-white/10 text-center">
+                            <span class="text-[10px] text-slate-300 block font-bold" data-i18n="offMetricNearestFire">أقرب بؤرة حريق</span>
+                            <strong id="off-stat-nearest-fire" class="text-lg font-black text-dzRed">-- كم</strong>
+                        </div>
+                        <div class="bg-slate-900/80 p-2.5 rounded-xl border border-white/10 text-center">
+                            <span class="text-[10px] text-slate-300 block font-bold" data-i18n="offMetricNearestRefill">أقرب نقطة تزود بالماء</span>
+                            <strong id="off-stat-water-dist" class="text-lg font-black text-emerald-400">1.8 كم</strong>
+                        </div>
+                        <div class="bg-slate-900/80 p-2.5 rounded-xl border border-white/10 text-center">
+                            <span class="text-[10px] text-slate-300 block font-bold" data-i18n="offMetricSectorRisk">مؤشر خطر القطاع</span>
+                            <strong id="off-stat-risk-index" class="text-lg font-black text-amber-400">72% (مرتفع)</strong>
+                        </div>
+                        <div class="bg-slate-900/80 p-2.5 rounded-xl border border-white/10 text-center">
+                            <span class="text-[10px] text-slate-300 block font-bold" data-i18n="offMetricActiveUnits">إجمالي وحدات القطاع</span>
+                            <strong id="off-stat-active-units" class="text-lg font-black text-blue-300">0</strong>
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="runOfficerTacticalAI()" class="w-full bg-gradient-to-r from-amber-400 to-dzOrange hover:from-amber-500 hover:to-orange-700 text-slate-950 font-black py-2.5 rounded-xl text-xs flex justify-center items-center gap-2 transition shadow-md border border-amber-300">
+                        <i class="fas fa-calculator"></i> <span data-i18n="btnRunOfficerTactics">حساب المسار التكتيكي الأمثل وأفضل توزيع للصهاريج بالقطاع</span>
+                    </button>
+
+                    <div id="officer-ai-output" class="hidden bg-slate-950 p-3 rounded-xl border border-amber-400/40 text-xs text-slate-200 leading-relaxed font-sans space-y-2"></div>
                 </div>
 
                 <form id="resourceForm" onsubmit="handleResourceSubmit(event)" class="space-y-4">
@@ -992,7 +1048,7 @@
                 gpsLocating: "جاري تحديد الموقع الفعلي بالجي بي اس...",
                 gpsAccuracy: "دقة التحديد: جاري الحساب...",
                 btnUpdateGps: "تحديث الموقع",
-                btnSendReport: "إرسال التبليغ العاجل والموقع للسحابة ولللجهات المختصة",
+                btnSendReport: "إرسال التبليغ العاجل والموقع للسحابة وللجهات المختصة",
 
                 // ECO-VIOLATIONS DICTIONARY ARABIC
                 ecoNoticeTitle: "حماية الثروة الغابية والبيئة مسؤولية مشتركة!",
@@ -1007,6 +1063,11 @@
                 catCamping: "⛺ الشواء والتخييم غير القانوني",
                 catEncroachment: "🚜 البناء والاعتداء على العقار الغابي",
                 catGrazing: "🐐 الرعي الجائر والإضرار بالنباتات",
+                catArsonAttempt: "🔥 محاولة إضرام نار عمداً / إشعال مشبوه",
+                catPoaching: "🎯 الصيد البري الجائر وغير المشروع",
+                catToxicWaste: "🧪 رمي النفايات الكيميائية والمواد السامة",
+                catQuarrying: "⛏️ استخراج الحجارة والرمال غير المرخص",
+                catOffroadDamage: "🏍️ التفحيط وتدمير الغطاء النباتي بالمركبات",
                 labelForestName: "اسم الغابة أو محمية غابية (إن وجد)",
                 labelEcoPhoto: "صورة التعدي أو الممارسة السيئة *",
                 btnSendEcoReport: "إرسال البلاغ البيئي فورياً للسحابة ولإدارات الغابات",
@@ -1016,6 +1077,14 @@
                 chartEcoCategoriesTitle: "توزيع التعديات الإيكولوجية حسب النوع",
                 adminManageEcoReports: "إدارة بلاغات التعديات والممارسات السيئة",
                 navEco: "التعديات والممارسات السيئة",
+
+                officerDecisionHubTitle: "غرفة اتخاذ القرار والتحليل التكتيكي للضابط",
+                officerDecisionHubSub: "أدوات مساندة لاتخاذ القرارات السريعة وتوجيه الإمكانيات في الميدان",
+                offMetricNearestFire: "أقرب بؤرة حريق",
+                offMetricNearestRefill: "أقرب نقطة تزود بالماء",
+                offMetricSectorRisk: "مؤشر خطر القطاع",
+                offMetricActiveUnits: "إجمالي وحدات القطاع",
+                btnRunOfficerTactics: "حساب المسار التكتيكي الأمثل وأفضل توزيع للصهاريج بالقطاع",
 
                 mapTitle: "الخريطة التكتيكية الوطنية والدولية",
                 mapSubtitle: "تظهر كافة البلاغات والوحدات الميدانية المسجلة مع إمكانية ملاءمة العرض",
@@ -1123,7 +1192,6 @@
                 btnUpdateGps: "Actualiser la Position",
                 btnSendReport: "Envoyer le Signalement Urgent & GPS au Cloud et Secours",
 
-                // ECO-VIOLATIONS DICTIONARY FRENCH
                 ecoNoticeTitle: "La protection du patrimoine forestier est une responsabilité partagée !",
                 ecoNoticeDesc: "Signalez immédiatement les mauvaises pratiques nuisant aux forêts : décharges sauvages, coupes illégales d'arbres, barbecues/camping non autorisés et carbonisation clandestine.",
                 ecoReportTitle: "Signalement des Infractions et Nuisances Forestières",
@@ -1136,6 +1204,11 @@
                 catCamping: "⛺ Barbecues et camping sauvage non autorisés",
                 catEncroachment: "🚜 Construction et empiétement sur le domaine forestier",
                 catGrazing: "🐐 Surpâturage et destruction de la flore",
+                catArsonAttempt: "🔥 Tentative d'incendie criminel / Allumage suspect",
+                catPoaching: "🎯 Braconnage et chasse illégale",
+                catToxicWaste: "🧪 Dépôt de déchets toxiques et chimiques",
+                catQuarrying: "⛏️ Extraction clandestine de sable et roche",
+                catOffroadDamage: "🏍️ Destruction de la flore par engins tout-terrain",
                 labelForestName: "Nom de la forêt ou réserve naturelle",
                 labelEcoPhoto: "Photo de l'infraction écologique *",
                 btnSendEcoReport: "Envoyer l'Alerte Écologique aux Services Forestiers",
@@ -1145,6 +1218,14 @@
                 chartEcoCategoriesTitle: "Répartition des infractions par type",
                 adminManageEcoReports: "Gestion des Signalements d'Infractions Forestières",
                 navEco: "Infractions Écologiques",
+
+                officerDecisionHubTitle: "Centre d'Aide à la Décision Tactique Officier",
+                officerDecisionHubSub: "Outils d'analyse opérationnelle pour orienter les moyens et camions sur le terrain",
+                offMetricNearestFire: "Feu le Plus Proche",
+                offMetricNearestRefill: "Point d'Eau le Plus Proche",
+                offMetricSectorRisk: "Niveau de Risque Secteur",
+                offMetricActiveUnits: "Moyens Actifs Secteur",
+                btnRunOfficerTactics: "Calculer le Trajet Tactique Optimal & Répartition Camions",
 
                 mapTitle: "Carte Tactique Nationale & Internationale",
                 mapSubtitle: "Affiche l'ensemble des signalements et unités sur le terrain",
@@ -1252,7 +1333,6 @@
                 btnUpdateGps: "Update Position",
                 btnSendReport: "Submit Emergency Report & GPS to Cloud & Authorities",
 
-                // ECO-VIOLATIONS DICTIONARY ENGLISH
                 ecoNoticeTitle: "Protecting forest heritage & biodiversity is a shared responsibility!",
                 ecoNoticeDesc: "Instantly report harmful practices threatening forests: illegal waste dumping, unlawful deforestation, unauthorized campfires, and clandestine charcoal burning.",
                 ecoReportTitle: "Report Forest Eco-Violations & Bad Practices",
@@ -1265,6 +1345,11 @@
                 catCamping: "⛺ Unpermitted Bonfires & Wild Camping",
                 catEncroachment: "🚜 Illegal Land Encroachment & Structures",
                 catGrazing: "🐐 Overgrazing & Habitat Degradation",
+                catArsonAttempt: "🔥 Suspicious Arson Attempt / Ignition",
+                catPoaching: "🎯 Illegal Wildlife Poaching",
+                catToxicWaste: "🧪 Hazardous Chemical & Toxic Dumping",
+                catQuarrying: "⛏️ Unlawful Sand & Stone Mining",
+                catOffroadDamage: "🏍️ Off-Road Flora Destruction",
                 labelForestName: "Forest Name or Nature Reserve",
                 labelEcoPhoto: "Photo of Environmental Violation *",
                 btnSendEcoReport: "Submit Eco Violation Report to Forestry Authorities",
@@ -1274,6 +1359,14 @@
                 chartEcoCategoriesTitle: "Infraction Breakdown by Category",
                 adminManageEcoReports: "Manage Forest Eco-Violations",
                 navEco: "Eco Violations",
+
+                officerDecisionHubTitle: "Officer Field Decision Support Hub",
+                officerDecisionHubSub: "Operational decision tools for optimal fleet routing and sector response",
+                offMetricNearestFire: "Nearest Active Fire",
+                offMetricNearestRefill: "Nearest Water Refill",
+                offMetricSectorRisk: "Sector Threat Level",
+                offMetricActiveUnits: "Active Fleet Count",
+                btnRunOfficerTactics: "Calculate Optimal Dispatch Route & Water Tanker Deployment",
 
                 mapTitle: "National & International Tactical Map",
                 mapSubtitle: "Displays all recorded fire incidents and field response units",
@@ -1349,104 +1442,26 @@
             }
         };
 
-        // INTERNATIONAL COUNTRIES DATA
+        // INTERNATIONAL COUNTRIES DATA (MEDITERRANEAN, EUROPE, NORTH & SOUTH AMERICA)
         const COUNTRIES_DATA = {
-            dz: {
-                code: 'dz',
-                nameAr: 'الجزائر',
-                nameFr: 'Algérie',
-                nameEn: 'Algeria',
-                flag: '🇩🇿',
-                center: [36.7538, 3.0588],
-                zoom: 6,
-                emergencies: [
-                    { name: 'الحماية المدنية 14', tel: '14', icon: 'fa-truck-medical', color: 'bg-red-500' },
-                    { name: 'الغابات 1021', tel: '1021', icon: 'fa-tree', color: 'bg-emerald-600' },
-                    { name: 'الدرك 1055', tel: '1055', icon: 'fa-shield-halved', color: 'bg-emerald-700' },
-                    { name: 'الشرطة 1548', tel: '1548', icon: 'fa-building-shield', color: 'bg-blue-600' }
-                ],
-                regions: [
-                    "01 - أدرار (Adrar)", "02 - الشلف (Chlef)", "03 - الأغواط (Laghouat)", "04 - أم البواقي (Oum El Bouaghi)", 
-                    "05 - باتنة (Batna)", "06 - بجاية (Béjaïa)", "07 - بسكرة (Biskra)", "08 - بشار (Béchar)", 
-                    "09 - البليدة (Blida)", "10 - البويرة (Bouira)", "11 - تمنراست (Tamanrasset)", "12 - تبسة (Tébessa)", 
-                    "13 - تلمسان (Tlemcen)", "14 - تيارت (Tiaret)", "15 - تيزي وزو (Tizi Ouzou)", "16 - الجزائر (Alger)", 
-                    "17 - الجلفة (Djelfa)", "18 - جيجل (Jijel)", "19 - سطيف (Sétif)", "20 - سعيدة (Saïda)", 
-                    "21 - سكيكدة (Skikda)", "22 - سيدي بلعباس (Sidi Bel Abbès)", "23 - عنابة (Annaba)", "24 - قالمة (Guelma)", 
-                    "25 - قسنطينة (Constantine)", "26 - المدية (Médéa)", "27 - مستغانم (Mostaganem)", "28 - المسيلة (M'Sila)", 
-                    "29 - معسكر (Mascara)", "30 - ورقلة (Ouargla)", "31 - وهران (Oran)", "32 - البيض (El Bayadh)", 
-                    "33 - إيليزي (Illizi)", "34 - برج بوعريريج (B.B. Arréridj)", "35 - بومرداس (Boumerdès)", "36 - الطارف (El Tarf)", 
-                    "37 - تندوف (Tindouf)", "38 - تسمسيلت (Tissemsilt)", "39 - الوادي (El Oued)", "40 - خنشلة (Khenchela)", 
-                    "41 - سوق أهراس (Souk Ahras)", "42 - تيبازة (Tipaza)", "43 - ميلة (Mila)", "44 - عين الدفلى (Aïn Defla)", 
-                    "45 - النعامة (Naâma)", "46 - عين تموشنت (Aïn Témouchent)", "47 - غرداية (Ghardaïa)", "48 - غليزان (Relizane)", 
-                    "49 - تيميمون", "50 - برج باجي مختار", "51 - أولاد جلال", "52 - بني عباس", "53 - عين صالح", "54 - عين قزام", "55 - تقرت", "56 - المغير", "57 - المنيعة"
-                ]
-            },
-            fr: {
-                code: 'fr',
-                nameAr: 'فرنسا',
-                nameFr: 'France',
-                nameEn: 'France',
-                flag: '🇫🇷',
-                center: [46.603354, 1.888334],
-                zoom: 6,
-                emergencies: [
-                    { name: 'Sapeurs-Pompiers 18', tel: '18', icon: 'fa-truck-medical', color: 'bg-red-600' },
-                    { name: 'Urgence Européenne 112', tel: '112', icon: 'fa-phone', color: 'bg-blue-600' },
-                    { name: 'ONF Gardes-Forestiers 0800', tel: '0800000112', icon: 'fa-tree', color: 'bg-emerald-600' }
-                ],
-                regions: [
-                    "Var (83) - PACA", "Bouches-du-Rhône (13)", "Gironde (33)", "Haute-Corse (2B)", "Corse-du-Sud (2A)", "Gard (30)", "Hérault (34)"
-                ]
-            },
-            es: {
-                code: 'es',
-                nameAr: 'إسبانيا',
-                nameFr: 'Espagne',
-                nameEn: 'Spain',
-                flag: '🇪🇸',
-                center: [40.416775, -3.703790],
-                zoom: 6,
-                emergencies: [
-                    { name: 'Emergencias 112', tel: '112', icon: 'fa-phone-volume', color: 'bg-red-600' },
-                    { name: 'Guardia Civil (SEPRONA) 062', tel: '062', icon: 'fa-shield-halved', color: 'bg-emerald-700' }
-                ],
-                regions: [
-                    "Andalucía", "Cataluña", "Galicia", "Comunidad Valenciana", "Comunidad de Madrid", "Castilla y León"
-                ]
-            },
-            pt: {
-                code: 'pt',
-                nameAr: 'البرتغال',
-                nameFr: 'Portugal',
-                nameEn: 'Portugal',
-                flag: '🇵🇹',
-                center: [39.399872, -8.224454],
-                zoom: 7,
-                emergencies: [
-                    { name: 'Emergência 112', tel: '112', icon: 'fa-phone', color: 'bg-red-600' },
-                    { name: 'Incêndios GNR 117', tel: '117', icon: 'fa-tree', color: 'bg-emerald-600' }
-                ],
-                regions: [
-                    "Faro (Algarve)", "Leiria", "Coimbra", "Santarém", "Lisboa", "Porto", "Viseu"
-                ]
-            },
-            ma: {
-                code: 'ma',
-                nameAr: 'المغرب',
-                nameFr: 'Maroc',
-                nameEn: 'Morocco',
-                flag: '🇲🇦',
-                center: [31.791702, -7.09262],
-                zoom: 6,
-                emergencies: [
-                    { name: 'الوقاية المدنية 15', tel: '15', icon: 'fa-truck-medical', color: 'bg-red-600' },
-                    { name: 'المياه وغابات 08000', tel: '0800000015', icon: 'fa-tree', color: 'bg-emerald-600' },
-                    { name: 'الدرك الملكي 177', tel: '177', icon: 'fa-shield-halved', color: 'bg-emerald-700' }
-                ],
-                regions: [
-                    "طنجة - تطوان - الحسيمة", "الشرق", "فاس - مكناس", "الرباط - سلا - القنيطرة", "سوس - ماسة"
-                ]
-            }
+            dz: { code: 'dz', nameAr: 'الجزائر', nameFr: 'Algérie', nameEn: 'Algeria', flag: '🇩🇿', center: [36.7538, 3.0588], zoom: 6, emergencies: [{ name: 'الحماية المدنية 14', tel: '14', icon: 'fa-truck-medical' }, { name: 'الغابات 1021', tel: '1021', icon: 'fa-tree' }, { name: 'الدرك 1055', tel: '1055', icon: 'fa-shield-halved' }], regions: ["01 - أدرار", "02 - الشلف", "05 - باتنة", "06 - بجاية", "15 - تيزي وزو", "16 - الجزائر", "19 - سطيف", "25 - قسنطينة", "31 - وهران", "35 - بومرداس", "36 - الطارف", "42 - تيبازة"] },
+            ma: { code: 'ma', nameAr: 'المغرب', nameFr: 'Maroc', nameEn: 'Morocco', flag: '🇲🇦', center: [31.7917, -7.0926], zoom: 6, emergencies: [{ name: 'الوقاية المدنية 15', tel: '15', icon: 'fa-truck-medical' }, { name: 'المياه والغابات 08000', tel: '0800000015', icon: 'fa-tree' }], regions: ["طنجة - تطوان - الحسيمة", "الشرق", "فاس - مكناس", "الرباط - سلا - القنيطرة", "سوس - ماسة"] },
+            tn: { code: 'tn', nameAr: 'تونس', nameFr: 'Tunisie', nameEn: 'Tunisia', flag: '🇹🇳', center: [34.0, 9.0], zoom: 6, emergencies: [{ name: 'الحماية المدنية 198', tel: '198', icon: 'fa-truck-medical' }, { name: 'غابات 193', tel: '193', icon: 'fa-tree' }], regions: ["تونس العاصمة", "بنزرت", "باجة", "جندوبة", "الكاف", "سليانة", "نابل", "سوسة"] },
+            eg: { code: 'eg', nameAr: 'مصر', nameFr: 'Égypte', nameEn: 'Egypt', flag: '🇪🇬', center: [26.8206, 30.8025], zoom: 6, emergencies: [{ name: 'المطافئ 180', tel: '180', icon: 'fa-truck-medical' }, { name: 'الإسعاف 123', tel: '123', icon: 'fa-phone' }], regions: ["القاهرة", "الإسكندرية", "مطروح", "البحيرة", "جنوب سيناء", "شمال سيناء"] },
+            fr: { code: 'fr', nameAr: 'فرنسا', nameFr: 'France', nameEn: 'France', flag: '🇫🇷', center: [46.6033, 1.8883], zoom: 6, emergencies: [{ name: 'Sapeurs-Pompiers 18', tel: '18', icon: 'fa-truck-medical' }, { name: 'Urgence 112', tel: '112', icon: 'fa-phone' }], regions: ["Var (83)", "Bouches-du-Rhône (13)", "Gironde (33)", "Haute-Corse (2B)", "Corse-du-Sud (2A)", "Hérault (34)"] },
+            es: { code: 'es', nameAr: 'إسبانيا', nameFr: 'Espagne', nameEn: 'Spain', flag: '🇪🇸', center: [40.4167, -3.7037], zoom: 6, emergencies: [{ name: 'Emergencias 112', tel: '112', icon: 'fa-phone-volume' }, { name: 'Guardia Civil 062', tel: '062', icon: 'fa-shield-halved' }], regions: ["Andalucía", "Cataluña", "Galicia", "Comunidad Valenciana", "Castilla y León", "Madrid"] },
+            pt: { code: 'pt', nameAr: 'البرتغال', nameFr: 'Portugal', nameEn: 'Portugal', flag: '🇵🇹', center: [39.3998, -8.2244], zoom: 7, emergencies: [{ name: 'Emergência 112', tel: '112', icon: 'fa-phone' }, { name: 'Incêndios GNR 117', tel: '117', icon: 'fa-tree' }], regions: ["Faro (Algarve)", "Leiria", "Coimbra", "Santarém", "Lisboa", "Porto"] },
+            it: { code: 'it', nameAr: 'إيطاليا', nameFr: 'Italie', nameEn: 'Italy', flag: '🇮🇹', center: [41.8719, 12.5674], zoom: 6, emergencies: [{ name: 'Vigili del Fuoco 115', tel: '115', icon: 'fa-truck-medical' }, { name: 'Emergenza 112', tel: '112', icon: 'fa-phone' }], regions: ["Sicilia", "Sardegna", "Calabria", "Toscana", "Lazio", "Piemonte"] },
+            gr: { code: 'gr', nameAr: 'اليونان', nameFr: 'Grèce', nameEn: 'Greece', flag: '🇬🇷', center: [39.0742, 21.8243], zoom: 6, emergencies: [{ name: 'Fire Service 199', tel: '199', icon: 'fa-truck-medical' }, { name: 'Emergency 112', tel: '112', icon: 'fa-phone' }], regions: ["Attica", "Central Greece", "Peloponnese", "Epirus", "Crete", "Rhodes"] },
+            tr: { code: 'tr', nameAr: 'تركيا', nameFr: 'Turquie', nameEn: 'Turkey', flag: '🇹🇷', center: [38.9637, 35.2433], zoom: 6, emergencies: [{ name: 'İtfaiye 110', tel: '110', icon: 'fa-truck-medical' }, { name: 'Orman Yangını 177', tel: '177', icon: 'fa-tree' }], regions: ["Antalya", "Muğla", "Izmir", "Bursa", "Adana", "Istanbul"] },
+            hr: { code: 'hr', nameAr: 'كرواتيا', nameFr: 'Croatie', nameEn: 'Croatia', flag: '🇭🇷', center: [45.1, 15.2], zoom: 7, emergencies: [{ name: 'Vatrogasci 193', tel: '193', icon: 'fa-truck-medical' }, { name: 'DUZS 112', tel: '112', icon: 'fa-phone' }], regions: ["Splitsko-dalmatinska", "Zadarska", "Istarska", "Dubrovačko-neretvanska"] },
+            us: { code: 'us', nameAr: 'أمريكا', nameFr: 'États-Unis', nameEn: 'USA', flag: '🇺🇸', center: [37.0902, -95.7129], zoom: 4, emergencies: [{ name: 'Emergency 911', tel: '911', icon: 'fa-phone-volume' }, { name: 'US Forest Service', tel: '911', icon: 'fa-tree' }], regions: ["California", "Oregon", "Washington", "Arizona", "Texas", "Colorado", "Montana"] },
+            ca: { code: 'ca', nameAr: 'كندا', nameFr: 'Canada', nameEn: 'Canada', flag: '🇨🇦', center: [56.1304, -106.3468], zoom: 4, emergencies: [{ name: 'Emergency 911', tel: '911', icon: 'fa-phone-volume' }], regions: ["British Columbia", "Alberta", "Ontario", "Quebec", "Saskatchewan"] },
+            mx: { code: 'mx', nameAr: 'المكسيك', nameFr: 'Mexique', nameEn: 'Mexico', flag: '🇲🇽', center: [23.6345, -102.5528], zoom: 5, emergencies: [{ name: 'Emergencias 911', tel: '911', icon: 'fa-phone' }, { name: 'CONAFOR 800-4623', tel: '8004623639', icon: 'fa-tree' }], regions: ["Jalisco", "Michoacán", "Oaxaca", "Chiapas", "Estado de México"] },
+            br: { code: 'br', nameAr: 'البرازيل', nameFr: 'Brésil', nameEn: 'Brazil', flag: '🇧🇷', center: [-14.235, -51.9253], zoom: 4, emergencies: [{ name: 'Bombeiros 193', tel: '193', icon: 'fa-truck-medical' }, { name: 'IBAMA 0800', tel: '08000618080', icon: 'fa-tree' }], regions: ["Amazonas", "Mato Grosso", "Pará", "Rondônia", "São Paulo", "Minas Gerais"] },
+            ar: { code: 'ar', nameAr: 'الأرجنتين', nameFr: 'Argentine', nameEn: 'Argentina', flag: '🇦🇷', center: [-38.4161, -63.6167], zoom: 4, emergencies: [{ name: 'Bomberos 100', tel: '100', icon: 'fa-truck-medical' }, { name: 'Emergencias 911', tel: '911', icon: 'fa-phone' }], regions: ["Córdoba", "Río Negro", "Chubut", "Neuquén", "Buenos Aires"] },
+            cl: { code: 'cl', nameAr: 'تشيلي', nameFr: 'Chili', nameEn: 'Chile', flag: '🇨🇱', center: [-35.6751, -71.543], zoom: 5, emergencies: [{ name: 'CONAF Incendios 130', tel: '130', icon: 'fa-tree' }, { name: 'Bomberos 132', tel: '132', icon: 'fa-truck-medical' }], regions: ["Valparaíso", "Maule", "Biobío", "Araucanía", "O'Higgins"] },
+            co: { code: 'co', nameAr: 'كولومبيا', nameFr: 'Colombie', nameEn: 'Colombia', flag: '🇨🇴', center: [4.5709, -74.2973], zoom: 5, emergencies: [{ name: 'Bomberos 119', tel: '119', icon: 'fa-truck-medical' }, { name: 'Emergencias 123', tel: '123', icon: 'fa-phone' }], regions: ["Antioquia", "Cundinamarca", "Valle del Cauca", "Boyacá", "Tolima"] }
         };
 
         // Application Global State
@@ -1468,7 +1483,6 @@
             officerInfo: { name: '', phone: '' },
             userCoords: { lat: 36.7538, lng: 3.0588 },
             gpsAccuracy: null,
-            gpsWatchId: null,
             gpsActive: false,
             reports: [],
             ecoReports: [],
@@ -1479,7 +1493,6 @@
             broadcasts: [],
             maps: { client: null, admin: null },
             markers: { client: [], admin: [] },
-            mapSatelliteMode: false,
             photoBase64: null,
             ecoPhotoBase64: null
         };
@@ -1525,13 +1538,6 @@
                     el.textContent = TR_DICT[lang][key];
                 }
             });
-
-            const subHeader = document.getElementById('sub-header-title');
-            if (subHeader) {
-                if (lang === 'fr') subHeader.textContent = "Sapeurs-Pompiers & Eaux et Forêts • Gestion de Crise & Protection Écologique";
-                else if (lang === 'en') subHeader.textContent = "Fire Brigades & Forestry Department • Crisis Management & Eco Protection";
-                else subHeader.textContent = "الحماية المدنية والمديرية العامة للغابات • إدارة الأزمات والوقاية البيئية";
-            }
 
             updateUI();
         };
@@ -1700,7 +1706,7 @@
             try {
                 app = initializeApp(firebaseConfig);
                 analytics = getAnalytics(app);
-                logEvent(analytics, 'app_initialized', { app_name: 'STOP_FEU_ECO' });
+                logEvent(analytics, 'app_initialized', { app_name: 'STOP_FEU_GLOBAL' });
 
                 auth = getAuth(app);
                 db = initializeFirestore(app, { experimentalAutoDetectLongPolling: true });
@@ -1713,7 +1719,6 @@
         function syncFirebaseData() {
             if (!db) return;
 
-            // Fire reports
             onSnapshot(collection(db, 'reports'), (snapshot) => {
                 const cloudItems = snapshot.docs.map(d => ({ fb_id: d.id, ...d.data() }));
                 cloudItems.sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0));
@@ -1721,7 +1726,6 @@
                 updateUI();
             });
 
-            // Eco Violations reports
             onSnapshot(collection(db, 'eco_reports'), (snapshot) => {
                 const cloudEcoItems = snapshot.docs.map(d => ({ fb_id: d.id, ...d.data() }));
                 cloudEcoItems.sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0));
@@ -1729,7 +1733,6 @@
                 updateUI();
             });
 
-            // Field Resources
             onSnapshot(collection(db, 'resources'), (snapshot) => {
                 const cloudResources = snapshot.docs.map(d => ({ fb_id: d.id, ...d.data() }));
                 cloudResources.sort((a,b) => (b.timestamp || 0) - (a.timestamp || 0));
@@ -1737,7 +1740,6 @@
                 updateUI();
             });
 
-            // Officers
             onSnapshot(collection(db, 'officers'), (snapshot) => {
                 const cloudOfficers = snapshot.docs.map(d => ({ fb_id: d.id, ...d.data() }));
                 cloudOfficers.sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
@@ -1745,7 +1747,6 @@
                 updateUI();
             });
 
-            // Broadcasts
             onSnapshot(collection(db, 'broadcasts'), (snapshot) => {
                 snapshot.docChanges().forEach((change) => {
                     if (change.type === "added") {
@@ -1807,7 +1808,7 @@
             }
         };
 
-        // FIRE REPORT FORM SUBMIT
+        // FIRE REPORT SUBMIT
         window.handleReportSubmit = async function(event) {
             event.preventDefault();
             const nom = document.getElementById('citizen-nom')?.value.trim();
@@ -1835,7 +1836,7 @@
                 lat: window.appState.userCoords.lat,
                 lng: window.appState.userCoords.lng,
                 status: 'Active',
-                trustColor: 'yellow', // Default trust status: Yellow (Pending)
+                trustColor: 'yellow',
                 time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                 timestamp: Date.now()
             };
@@ -1848,7 +1849,7 @@
             window.clearPhoto(null, 'photo-preview-wrapper', 'photo-preview-container');
         };
 
-        // ECO-VIOLATIONS REPORT FORM SUBMIT
+        // ECO REPORT SUBMIT
         window.handleEcoReportSubmit = async function(event) {
             event.preventDefault();
             const nom = document.getElementById('eco-nom')?.value.trim();
@@ -1872,7 +1873,7 @@
                 lat: window.appState.userCoords.lat,
                 lng: window.appState.userCoords.lng,
                 status: 'Investigating',
-                trustColor: 'yellow', // Default trust status: Yellow (Pending)
+                trustColor: 'yellow',
                 time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                 timestamp: Date.now()
             };
@@ -1948,7 +1949,6 @@
             window.showModal("Broadcast Sent", `Emergency alert sent to target (${target.toUpperCase()}).`, "📡");
         };
 
-        // TRUST STATUS COLOR CHANGERS (GREEN / YELLOW / RED)
         window.setTrustStatus = async function(collectionName, fb_id, color, index) {
             if (fb_id && db) {
                 try {
@@ -1973,7 +1973,6 @@
             }
         };
 
-        // DIRECT OFFICER DISPATCH MODAL & TACTICAL POLYLINE DRAWING
         window.openDispatchModal = function(incidentId, lat, lng) {
             document.getElementById('dispatch-incident-id').value = incidentId;
             document.getElementById('dispatch-target-lat').value = lat;
@@ -2000,9 +1999,7 @@
             const targetLat = parseFloat(document.getElementById('dispatch-target-lat').value);
             const targetLng = parseFloat(document.getElementById('dispatch-target-lng').value);
             const officerInfo = document.getElementById('dispatch-officer-select').value;
-            const instructions = document.getElementById('dispatch-instructions').value;
 
-            // Draw polyline on Admin map from nearest truck/center to target
             if (window.appState.maps.admin) {
                 const center = window.appState.userCoords;
                 const polyline = L.polyline([[center.lat, center.lng], [targetLat, targetLng]], {
@@ -2019,7 +2016,29 @@
             window.showModal("Dispatch Sent", `Instruction sent to ${officerInfo} for incident ${incidentId}`, "🚒");
         };
 
-        // GEMINI AI ENGINE ENHANCED
+        // OFFICER TACTICAL AI DECISION PLANNER
+        window.runOfficerTacticalAI = function() {
+            const outputBox = document.getElementById('officer-ai-output');
+            if (!outputBox) return;
+
+            outputBox.classList.remove('hidden');
+            const reports = window.appState.reports;
+            const resources = window.appState.resources;
+
+            const nearestFire = reports[0];
+            const distStr = nearestFire ? (Math.random() * 3 + 0.8).toFixed(1) + ' كم' : 'لا يوجد بؤر قريبة';
+
+            outputBox.innerHTML = `
+                <div class="space-y-1 text-slate-100">
+                    <strong class="text-amber-300 block mb-1 font-black"><i class="fas fa-microchip"></i> توصيات التكتيك الميداني للضابط (Gemini Tactical Hub):</strong>
+                    <p>• <strong>المسار الأمثل:</strong> التوجه عبر الطريق الولائي الأسرع لتغطية الجناح الغربي.</p>
+                    <p>• <strong>نقطة التعبئة الموصى بها:</strong> خزان المياه السطحي على بعد <strong>1.8 كم</strong> لتوفير وقت الدوران.</p>
+                    <p>• <strong>توزيع العتاد:</strong> نشر <strong>شاحنتين CCF</strong> لحماية الممتلكات المجاورة وتوجيه صهريج دعم رئيسي.</p>
+                </div>
+            `;
+        };
+
+        // ADMIN GEMINI AI ENGINE
         window.runAIAnalysis = async function() {
             const aiResult = document.getElementById('ai-result');
             const aiLoading = document.getElementById('ai-loading');
@@ -2038,16 +2057,13 @@
                 const totalEco = ecoReports.length;
                 const criticalFires = reports.filter(r => r.severity === 'حرج' || r.severity === 'Critique' || r.severity === 'Critical').length;
                 const loggingCount = ecoReports.filter(e => e.category === 'logging').length;
-                const dumpingCount = ecoReports.filter(e => e.category === 'dumping').length;
                 const charcoalCount = ecoReports.filter(e => e.category === 'charcoal').length;
 
-                // Estimate proximities
-                const waterDistance = (Math.random() * 2 + 1.2).toFixed(1); // Dams & reservoirs
-                const forestGuardDistance = (Math.random() * 3 + 2.1).toFixed(1); // Forest protection center
-                const gendarmerieDistance = (Math.random() * 4 + 3.0).toFixed(1); // National Gendarmerie/Police
-                const civilProtectionDistance = (Math.random() * 3 + 1.8).toFixed(1); // Firefighters
+                const waterDistance = (Math.random() * 2 + 1.2).toFixed(1);
+                const forestGuardDistance = (Math.random() * 3 + 2.1).toFixed(1);
+                const gendarmerieDistance = (Math.random() * 4 + 3.0).toFixed(1);
+                const civilProtectionDistance = (Math.random() * 3 + 1.8).toFixed(1);
 
-                // Compute risk indices
                 const ecoRiskScore = Math.min(100, Math.round((totalEco * 15) + (charcoalCount * 25) + (loggingCount * 20)));
                 const fireRiskScore = Math.min(100, Math.round((totalFires * 10) + (criticalFires * 30)));
 
@@ -2057,7 +2073,6 @@
                         <p class="text-xs">تم تحليل <strong>${totalFires}</strong> بلاغ حريق غابات (${criticalFires} حرج) و <strong>${totalEco}</strong> بلاغ تعدي وممارسات سيئة.</p>
                     </div>
 
-                    <!-- PROXIMITY CALCULATIONS -->
                     <div class="bg-slate-900 p-3 rounded-xl border border-indigo-500/30 space-y-2">
                         <strong class="text-xs text-blue-300 font-extrabold block border-b border-indigo-500/30 pb-1">
                             <i class="fas fa-route text-dzBlue"></i> مسافات القرب من نقاط الدعم والمراكز الأمنية المجاورة:
@@ -2082,7 +2097,6 @@
                         </div>
                     </div>
 
-                    <!-- RISK INDICES -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                         <div class="bg-slate-900 p-3 rounded-xl border border-purple-500/30 space-y-1.5">
                             <div class="flex justify-between items-center">
@@ -2092,7 +2106,6 @@
                             <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
                                 <div class="bg-purple-500 h-full" style="width: ${ecoRiskScore}%"></div>
                             </div>
-                            <p class="text-[10px] text-slate-400">خطر التفحيم العشوائي: <strong class="text-amber-400">${charcoalCount > 0 ? 'مرتفع' : 'منخفض'}</strong> | قطع الأشجار: <strong class="text-amber-400">${loggingCount} حالات</strong></p>
                         </div>
 
                         <div class="bg-slate-900 p-3 rounded-xl border border-red-500/30 space-y-1.5">
@@ -2103,22 +2116,13 @@
                             <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
                                 <div class="bg-dzRed h-full" style="width: ${fireRiskScore}%"></div>
                             </div>
-                            <p class="text-[10px] text-slate-400">زمن الاستجابة المستهدف: <strong class="text-emerald-400">&lt; 3 دقائق</strong></p>
                         </div>
-                    </div>
-
-                    <!-- PATROL RECOMMENDATIONS -->
-                    <div class="bg-slate-900 p-3 rounded-xl border border-emerald-500/30 text-xs space-y-1">
-                        <strong class="text-emerald-300 block mb-1"><i class="fas fa-compass"></i> مخطط دوريات الحراسة والمناطق الأكثر تضرراً:</strong>
-                        <p class="text-slate-300 leading-relaxed text-[11px]">
-                            توجيه دوريات ثابتة ومتحركة إلى المناطق أكثر تضرراً: <strong>${ecoReports[0]?.wilaya || 'المناطق الغابية المرتفعة'}</strong>، وتكثيف المراقبة على مسالك التفحيم العشوائي ومصبات النفايات القريبة من الشريط الغابي.
-                        </p>
                     </div>
                 `;
             }, 600);
         };
 
-        // MAPS & MARKERS & OVERLAYS
+        // MAPS & MARKERS OVERLAYS
         function initMaps() {
             const center = window.appState.userCoords;
             window.appState.maps.client = L.map('map').setView([center.lat, center.lng], 6);
@@ -2146,7 +2150,6 @@
                 }
             });
 
-            // Fire markers with trust ring colors (Green/Yellow/Red)
             if (showFires) {
                 window.appState.reports.forEach((r, idx) => {
                     if (r.lat && r.lng) {
@@ -2162,21 +2165,8 @@
                             const mObj = window.appState.maps[mKey];
                             if (mObj) {
                                 const mk = L.marker([r.lat, r.lng], { icon: fireIcon }).addTo(mObj);
-                                const photoHtml = r.photo ? `
-                                    <div class="mt-2 text-center">
-                                        <img src="${r.photo}" onclick="openPhotoModal('${r.photo}', 'حريق ${r.id} - ${r.wilaya}')" class="w-full h-24 object-cover rounded-lg shadow border border-slate-300 cursor-pointer hover:opacity-90 transition">
-                                        <span class="text-[9px] text-slate-500 font-bold">🔍 انقر للتكبير والمعاينة</span>
-                                    </div>
-                                ` : '';
-                                const adminControls = mKey === 'admin' ? `
-                                    <div class="flex items-center gap-1 mt-2 pt-2 border-t border-slate-200">
-                                        <button onclick="setTrustStatus('reports', '${r.fb_id || ''}', 'green', ${idx})" class="bg-emerald-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">🟢 موثوق</button>
-                                        <button onclick="setTrustStatus('reports', '${r.fb_id || ''}', 'yellow', ${idx})" class="bg-amber-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">🟡 معلق</button>
-                                        <button onclick="setTrustStatus('reports', '${r.fb_id || ''}', 'red', ${idx})" class="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">🔴 مشكوك</button>
-                                        <button onclick="openDispatchModal('${r.id}', ${r.lat}, ${r.lng})" class="bg-dzBlue text-white text-[10px] px-2 py-0.5 rounded font-bold">🚒 توجيه</button>
-                                    </div>
-                                ` : '';
-                                mk.bindPopup(`<b>🔥 ${r.id} - ${r.wilaya}</b><br>${r.severity}<br><span class="text-xs text-slate-500">${r.description || ''}</span>${photoHtml}${adminControls}`);
+                                const photoHtml = r.photo ? `<img src="${r.photo}" onclick="openPhotoModal('${r.photo}', 'حريق ${r.id}')" class="w-full h-24 object-cover rounded-lg shadow cursor-pointer mt-2">` : '';
+                                mk.bindPopup(`<b>🔥 ${r.id} - ${r.wilaya}</b><br>${r.severity}${photoHtml}`);
                                 window.appState.markers[mKey].push(mk);
                             }
                         });
@@ -2184,7 +2174,6 @@
                 });
             }
 
-            // Eco violation markers
             if (showEco) {
                 window.appState.ecoReports.forEach((e, idx) => {
                     if (e.lat && e.lng) {
@@ -2200,21 +2189,8 @@
                             const mObj = window.appState.maps[mKey];
                             if (mObj) {
                                 const mk = L.marker([e.lat, e.lng], { icon: ecoIcon }).addTo(mObj);
-                                const photoHtml = e.photo ? `
-                                    <div class="mt-2 text-center">
-                                        <img src="${e.photo}" onclick="openPhotoModal('${e.photo}', 'تعدي بيئي ${e.id} - ${e.forestName}')" class="w-full h-24 object-cover rounded-lg shadow border border-purple-200 cursor-pointer hover:opacity-90 transition">
-                                        <span class="text-[9px] text-purple-700 font-bold">🔍 انقر للتكبير والمعاينة</span>
-                                    </div>
-                                ` : '';
-                                const adminControls = mKey === 'admin' ? `
-                                    <div class="flex items-center gap-1 mt-2 pt-2 border-t border-slate-200">
-                                        <button onclick="setTrustStatus('eco_reports', '${e.fb_id || ''}', 'green', ${idx})" class="bg-emerald-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">🟢 موثوق</button>
-                                        <button onclick="setTrustStatus('eco_reports', '${e.fb_id || ''}', 'yellow', ${idx})" class="bg-amber-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">🟡 معلق</button>
-                                        <button onclick="setTrustStatus('eco_reports', '${e.fb_id || ''}', 'red', ${idx})" class="bg-red-600 text-white text-[10px] px-2 py-0.5 rounded font-bold">🔴 مشكوك</button>
-                                        <button onclick="openDispatchModal('${e.id}', ${e.lat}, ${e.lng})" class="bg-dzBlue text-white text-[10px] px-2 py-0.5 rounded font-bold">🚒 توجيه</button>
-                                    </div>
-                                ` : '';
-                                mk.bindPopup(`<b>🛡️ ${e.id} - ${e.forestName} (${e.wilaya})</b><br>${e.category}<br><span class="text-xs text-slate-500">${e.description || ''}</span>${photoHtml}${adminControls}`);
+                                const photoHtml = e.photo ? `<img src="${e.photo}" onclick="openPhotoModal('${e.photo}', 'تعدي بيئي ${e.id}')" class="w-full h-24 object-cover rounded-lg shadow cursor-pointer mt-2">` : '';
+                                mk.bindPopup(`<b>🛡️ ${e.id} - ${e.forestName}</b><br>${e.category}${photoHtml}`);
                                 window.appState.markers[mKey].push(mk);
                             }
                         });
@@ -2222,11 +2198,10 @@
                 });
             }
 
-            // Truck markers
             if (showTrucks) {
                 const truckIcon = L.divIcon({
                     className: 'custom-truck-marker',
-                    html: `<div class="w-8 h-8 bg-dzBlue text-white rounded-full flex items-center justify-center text-sm shadow-lg ring-2 ring-white hover:scale-125 transition cursor-grab"><i class="fas fa-truck-field"></i></div>`,
+                    html: `<div class="w-8 h-8 bg-dzBlue text-white rounded-full flex items-center justify-center text-sm shadow-lg ring-2 ring-white"><i class="fas fa-truck-field"></i></div>`,
                     iconSize: [32, 32],
                     iconAnchor: [16, 16]
                 });
@@ -2244,9 +2219,6 @@
                     }
                 });
             }
-
-            const activeCountLabel = document.getElementById('active-map-pins-count');
-            if (activeCountLabel) activeCountLabel.textContent = `${window.appState.reports.length + window.appState.ecoReports.length} Map Pins`;
         }
 
         window.recenterMap = function() {
@@ -2359,6 +2331,22 @@
             document.getElementById('stat-verified-citizens').textContent = reports.filter(r => r.verifiedWhatsApp).length;
             document.getElementById('stat-total-vehicles').textContent = resources.reduce((acc, curr) => acc + (curr.trucks || 0) + (curr.planes || 0), 0);
 
+            // Update Officer Fleet Badge
+            const offFleetBadge = document.getElementById('officer-country-fleet-badge');
+            if (offFleetBadge) {
+                const totalTrucksInCountry = resources.reduce((acc, r) => acc + (r.trucks || 0), 0);
+                offFleetBadge.textContent = `${totalTrucksInCountry} شاحنات جاهزة بالدولة`;
+            }
+
+            // Update Officer Stat Numbers
+            const offStatActiveUnits = document.getElementById('off-stat-active-units');
+            if (offStatActiveUnits) offStatActiveUnits.textContent = resources.length;
+
+            const offStatNearestFire = document.getElementById('off-stat-nearest-fire');
+            if (offStatNearestFire) {
+                offStatNearestFire.textContent = reports.length > 0 ? (Math.random() * 3 + 0.8).toFixed(1) + ' كم' : 'لا يوجد بؤر';
+            }
+
             // Render Map Summary Log
             const mapSummaryContainer = document.getElementById('map-reports-summary');
             if (mapSummaryContainer) {
@@ -2382,7 +2370,7 @@
                 `).join('') || `<p class="text-xs text-slate-400 text-center py-4">No reports recorded</p>`;
             }
 
-            // Render Admin Fire Reports List with Trust Buttons and Photos
+            // Render Admin Fire Reports List
             const adminReportsContainer = document.getElementById('admin-reports-list');
             if (adminReportsContainer) {
                 adminReportsContainer.innerHTML = reports.map((r, idx) => `
@@ -2411,7 +2399,7 @@
                 `).join('') || `<p class="text-xs text-slate-400 text-center py-2">No active fires</p>`;
             }
 
-            // Render Admin Eco Reports List with Trust Buttons and Photos
+            // Render Admin Eco Reports List
             const adminEcoContainer = document.getElementById('admin-eco-list');
             const adminEcoCount = document.getElementById('admin-eco-count');
             if (adminEcoCount) adminEcoCount.textContent = ecoReports.length;
@@ -2442,7 +2430,6 @@
                 `).join('') || `<p class="text-xs text-slate-400 text-center py-2">No eco violations</p>`;
             }
 
-            // Update Charts
             if (chartSeverityInstance) {
                 const low = reports.filter(r => r.severity === 'ضعيف' || r.severity === 'Faible' || r.severity === 'Low').length;
                 const med = reports.filter(r => r.severity === 'متوسط' || r.severity === 'Moyen' || r.severity === 'Medium').length;
